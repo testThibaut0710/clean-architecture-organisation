@@ -1,14 +1,23 @@
-name: CI
+name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+      - release
+      - production
   pull_request:
-    branches: [ main ]
+    branches: 
+      - main
+      - release
+      - production
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI] # Les noms des dossiers ou des projets pour chaque API
 
     steps:
     - name: Checkout repository
@@ -20,10 +29,32 @@ jobs:
         dotnet-version: '7.x' # Assurez-vous que c'est la version de .NET que vous utilisez
 
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore ${{ matrix.api }}.sln # Restaurer les dépendances pour chaque API
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build ${{ matrix.api }}.sln --no-restore # Construire chaque API
 
     - name: Run tests
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ${{ matrix.api }}.sln --no-build --verbosity normal # Exécuter les tests pour chaque API
+
+  deploy:
+    if: github.ref == 'refs/heads/release' || github.ref == 'refs/heads/production'
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '7.x'
+
+    - name: Publish to Azure
+      run: |
+        # Ajoutez ici les commandes pour publier votre application sur Azure ou un autre service
+        # Par exemple, pour Azure Web App :
+        az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api1/bin/Release/net7.0/publish
+        az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api2/bin/Release/net7.0/publish
+        az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api3/bin/Release/net7.0/publish
