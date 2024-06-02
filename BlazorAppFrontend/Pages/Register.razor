@@ -1,0 +1,63 @@
+﻿@page "/register"
+@using BlazorAppFrontend.Models.DTO
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager Navigation
+
+<h3>Register</h3>
+
+<EditForm Model="@userRegister" OnValidSubmit="@HandleRegister">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="userName">User Name:</label>
+        <InputText id="userName" @bind-Value="userRegister.UserName" />
+    </div>
+    <div>
+        <label for="passwordClear">Password:</label>
+        <InputText id="passwordClear" type="password" @bind-Value="userRegister.PasswordClear" />
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" type="email" @bind-Value="userRegister.Email" />
+    </div>
+    <div>
+        <label for="phoneNumber">Phone Number:</label>
+        <InputText id="phoneNumber" @bind-Value="userRegister.PhoneNumber" />
+    </div>
+    <div>
+        <label for="dateOfBirth">Date of Birth:</label>
+        <InputDate id="dateOfBirth" @bind-Value="userRegister.DateOfBirth" />
+    </div>
+    <div>
+        <label for="role">Role:</label>
+        <InputText id="role" @bind-Value="userRegister.Role" />
+    </div>
+    <button type="submit">Register</button>
+</EditForm>
+
+<p>@errorMessage</p>
+
+@code {
+    private UserRegisterDTO userRegister = new UserRegisterDTO
+        {
+            DateOfBirth = DateTime.Now
+        };
+    private string errorMessage;
+
+    private async Task HandleRegister()
+    {
+        var client = HttpClientFactory.CreateClient("UserRegistrationAPI");
+        var response = await client.PostAsJsonAsync("UserRegistration/Register", userRegister);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // Handle successful registration (e.g., navigate to a login page, etc.)
+            Navigation.NavigateTo("/login");
+        }
+        else
+        {
+            errorMessage = "Impossible de s'enregistrer !";
+        }
+    }
+}
