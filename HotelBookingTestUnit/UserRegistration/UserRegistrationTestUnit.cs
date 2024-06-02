@@ -5,7 +5,7 @@ using UserRegistrationAPI.Controllers;
 using UserRegistrationAPI.Interfaces;
 using UserRegistrationAPI.Models.DTO;
 
-namespace UserRegistrationTestUnit.UserRegistation
+namespace TestUnitaire
 {
     [TestClass]
     public class UserRegistrationControllerTests

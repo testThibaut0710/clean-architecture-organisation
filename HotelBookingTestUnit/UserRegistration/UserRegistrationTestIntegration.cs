@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using UserRegistrationAPI;
 using UserRegistrationAPI.Models.DTO;
 
-namespace HotelBookingTestUnit.UserRegistration
+namespace TestIntegration
 {
     [TestClass]
     public class UserRegistrationControllerIntegrationTests
@@ -82,7 +82,7 @@ namespace HotelBookingTestUnit.UserRegistration
         [TestMethod]
         public async Task Login_ValidCredentials_ReturnsOk()
         {
-            Register_ValidUser_ReturnsOk();
+            await Register_ValidUser_ReturnsOk();
             // Arrange
             var userDTOLogin = new UserDTO
             {

@@ -7,7 +7,7 @@ using RoomReservationAPI.Models;
 using RoomReservationAPI.Models.DTO;
 using System.Diagnostics;
 
-namespace HotelBookingTestUnit.RoomReservation
+namespace TestUnitaire
 {
     [TestClass]
     public class GestionReservationTests

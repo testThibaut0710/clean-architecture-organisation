@@ -13,7 +13,7 @@ using System.Net.Http.Headers;
 using System.Diagnostics;
 using HotelInformationAPI;
 
-namespace IntegrationTests
+namespace TestIntegration
 {
     [TestClass]
     public class HotelControllerIntegrationTests

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace HotelBookingTestUnit.HotelInformation
+namespace TestUnitaire
 {
     [TestClass]
     public class HotelControllerTests

@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTestsRoomReservation
+namespace TestIntegration
 {
     [TestClass]
     public class RoomReservationTestIntegration
