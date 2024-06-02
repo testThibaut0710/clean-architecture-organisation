@@ -11,8 +11,8 @@ namespace UserRegistrationAPI.Services
         private readonly IUserRepo<User, string> _userRepo;
         private readonly ITokenGenerate<UserDTO, string> _tokenGenerate;
 
-        public UserService(IUserRepo<User,string> userRepo,
-                           ITokenGenerate<UserDTO,string> tokenGenerate)
+        public UserService(IUserRepo<User, string> userRepo,
+                           ITokenGenerate<UserDTO, string> tokenGenerate)
         {
             _userRepo = userRepo;
             _tokenGenerate = tokenGenerate;

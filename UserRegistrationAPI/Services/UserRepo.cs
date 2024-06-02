@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using UserRegistrationAPI.Interfaces;
 using UserRegistrationAPI.Models;
 
 namespace UserRegistrationAPI.Services
 {
-    public class UserRepo : IUserRepo<User,string>
+    public class UserRepo : IUserRepo<User, string>
     {
         private readonly UserContext _userContext;
 

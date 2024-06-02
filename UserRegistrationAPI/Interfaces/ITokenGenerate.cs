@@ -1,8 +1,6 @@
-﻿using UserRegistrationAPI.Models.DTO;
-
-namespace UserRegistrationAPI.Interfaces
+﻿namespace UserRegistrationAPI.Interfaces
 {
-    public interface ITokenGenerate<T,K>
+    public interface ITokenGenerate<T, K>
     {
         K GenerateToken(T item);
     }

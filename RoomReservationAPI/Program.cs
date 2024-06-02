@@ -23,7 +23,7 @@ namespace RoomReservationAPI
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<ReservationContext>(opts =>
             {
-                opts.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
+                opts.UseMySQL(builder.Configuration.GetConnectionString("conn"));
             });
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>

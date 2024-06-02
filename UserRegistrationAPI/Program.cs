@@ -7,6 +7,7 @@ using UserRegistrationAPI.Models;
 using UserRegistrationAPI.Models.DTO;
 using UserRegistrationAPI.Services;
 
+
 namespace UserRegistrationAPI
 {
     public class Program
@@ -23,7 +24,7 @@ namespace UserRegistrationAPI
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<UserContext>(opts =>
             {
-                opts.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
+                opts.UseMySQL(builder.Configuration.GetConnectionString("conn"));
             });
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options =>
@@ -51,7 +52,7 @@ namespace UserRegistrationAPI
             app.UseAuthentication();
             app.UseAuthorization();
 
-
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.MapControllers();
 
             app.Run();

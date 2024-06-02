@@ -2,7 +2,7 @@
 
 namespace UserRegistrationAPI.Models
 {
-    public class UserContext:DbContext
+    public class UserContext : DbContext
     {
         public UserContext(DbContextOptions options) : base(options)
         {
