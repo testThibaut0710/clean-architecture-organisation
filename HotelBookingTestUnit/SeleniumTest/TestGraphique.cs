@@ -21,17 +21,18 @@ public class TestGraphique
     public async Task Setup()
     {
         // Initialise le pilote Chrome
+        await StartBlazorApp();
         driver = new ChromeDriver();
+        await StartApi();
     }
 
     [TestMethod]
     [TestCategory("UITest")]
     public void TestLogin()
     {
-        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(50000));
         baseUrl = "http://localhost:5000/login";
         driver.Navigate().GoToUrl(baseUrl);
-        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5000));
+        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5000));
         driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(500000);
         IWebElement revealed = driver.FindElement(By.Id("login"));
         wait = new WebDriverWait(driver, TimeSpan.FromSeconds(500));
@@ -134,7 +135,7 @@ public class TestGraphique
     private async Task StartApi()
     {
         string workingDirectory = Directory.GetCurrentDirectory();
-
+        Debug.WriteLine(workingDirectory);
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
         string apiProjectDirectory = Path.Combine(projectDirectory, "UserRegistrationAPI/");
         Debug.WriteLine(apiProjectDirectory);
