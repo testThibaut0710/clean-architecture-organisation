@@ -24,7 +24,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '7.x' # Assurez-vous que c'est la version de .NET que vous utilisez
+        dotnet-version: '8.x' # Utilisation de .NET 8
 
     - name: Install dependencies
       run: dotnet restore HotelBookingSystemSolution.sln # Restaurer les dépendances pour la solution entière
@@ -36,7 +36,7 @@ jobs:
       run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal # Exécuter les tests pour la solution entière
 
   deploy:
-    if: github.ref == 'refs/heads/release' || github.ref == 'refs/heads/production'
+    if: github.ref == 'refs/heads/release'
     needs: build
     runs-on: ubuntu-latest
 
@@ -47,7 +47,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '7.x'
+        dotnet-version: '8.x' # Utilisation de .NET 8
 
     - name: Publish to Azure
       env:
