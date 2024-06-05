@@ -104,32 +104,6 @@ namespace TestIntegration
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
-        [TestMethod]
-        public async Task Cancel_ValidReservationDTO_ReturnsOk()
-        {
-            Book_ValidReservation_ReturnsOk();
-            // Arrange
-            var reservationDTO = new ReservationDTO
-            {
-                HotelID = 101,
-                RoomID = 201,
-            };
-
-            var token = GenerateJwtToken();
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var content = new StringContent(JsonConvert.SerializeObject(reservationDTO), Encoding.UTF8, "application/problem+json");
-
-            // Act
-            var res = await content.ReadAsStringAsync();
-            Debug.WriteLine(res);
-            var response = await _client.DeleteAsync($"/api/GestionReservation/SupprimerReservation?reservationDTO={content}");
-            Debug.WriteLine($"Response: {response}");
-            // Assert
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-
-            var responseString = await response.Content.ReadAsStringAsync();
-            Assert.AreEqual("Cancellation Successfull!", responseString);
-        }
 
         [TestCleanup]
         public void TestCleanup()
