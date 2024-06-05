@@ -27,13 +27,13 @@ jobs:
         dotnet-version: '7.x' # Assurez-vous que c'est la version de .NET que vous utilisez
 
     - name: Install dependencies
-      run: dotnet restore ${{ matrix.api }}.sln # Restaurer les dépendances pour chaque API
+      run: dotnet restore HotelBookingSystemSolution.sln # Restaurer les dépendances pour la solution entière
 
     - name: Build
-      run: dotnet build ${{ matrix.api }}.sln --no-restore # Construire chaque API
+      run: dotnet build HotelBookingSystemSolution.sln --no-restore # Construire la solution entière
 
     - name: Run tests
-      run: dotnet test ${{ matrix.api }}.sln --no-build --verbosity normal # Exécuter les tests pour chaque API
+      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal # Exécuter les tests pour la solution entière
 
   deploy:
     if: github.ref == 'refs/heads/release' || github.ref == 'refs/heads/production'
@@ -55,7 +55,7 @@ jobs:
         AZURE_RESOURCE_GROUP: clean-archi
         AZURE_PUBLISH_PROFILE: ${{ secrets.TEST_SECRET }} # Assurez-vous d'ajouter votre profil de publication en tant que secret GitHub
       run: |
-        for api in HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI; do
+        for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
           dotnet publish $api/$api.csproj -c Release -o $api/publish
           az webapp deploy --name $AZURE_WEBAPP_NAME --resource-group $AZURE_RESOURCE_GROUP --src-path $api/publish
         done
