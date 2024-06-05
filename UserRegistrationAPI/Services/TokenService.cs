@@ -13,7 +13,7 @@ namespace UserRegistrationAPI.Services
 
         public TokenService(IConfiguration configuration)
         {
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"]));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("f1e2d3c4b5a697867564738291a3b2c1"));
         }
         public string GenerateToken(UserDTO user)
         {

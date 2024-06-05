@@ -1,17 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using RoomReservationAPI.Models;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using UserRegistrationAPI;
 using UserRegistrationAPI.Models.DTO;
 
@@ -28,15 +21,10 @@ namespace TestIntegration
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("f1e2d3c4b5a697867564738291a3b2c1")); // Replace with your actual secret key
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Role, "user")
-            };
-
+          
             var token = new JwtSecurityToken(
                 issuer: "your_issuer",  // Replace with your issuer
                 audience: "your_audience",  // Replace with your audience (if needed)
-                claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(30), // Set a suitable expiration time
                 signingCredentials: credentials);
 
@@ -65,7 +53,7 @@ namespace TestIntegration
                 PhoneNumber = "1234567890",
                 DateOfBirth = new DateTime(2000, 1, 1),
                 Role = "user",
-                PasswordClear = "password123" // At least 8 characters
+                PasswordClear = "password123",
             };
             var token = GenerateJwtToken();
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
