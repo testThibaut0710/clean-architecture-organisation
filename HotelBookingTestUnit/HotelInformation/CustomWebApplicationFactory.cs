@@ -43,28 +43,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 // Ensure the database is created.
                 db.Database.EnsureCreated();
 
-                try
-                {
-                    // Seed the database with test data.
-                    db.InformationsHotel.Add(new Hotel
-                    {
-                        Id = 101,
-                        Name = "Grand Hotel Luxueux",
-                        Description = "Un hôtel luxueux offrant un séjour mémorable.",
-                        Address = "123 Rue test",
-                        ContactNumber = "0467000000",
-                        City = "Montpellier",
-                        Country = "FRANCE",
-                        AverageRating = 1,
-                        NumberOfRooms = 10,
-                        Price = 50,
-                    });
-                    db.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "An error occurred seeding the database. Error: {Message}", ex.Message);
-                }
+            
             }
         });
     }
