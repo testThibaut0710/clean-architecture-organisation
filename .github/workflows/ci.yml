@@ -27,6 +27,15 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.x'
+        
+    - name: Install Chrome and ChromeDriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+        LATEST=$(wget -q -O - https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+        wget https://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
+        sudo mv chromedriver /usr/local/bin/
 
     - name: Install dependencies
       run: dotnet restore release/Test/HotelBookingSystemSolution.sln
