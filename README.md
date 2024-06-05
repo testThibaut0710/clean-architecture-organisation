@@ -41,4 +41,4 @@ Authentification et autorisation
 Défi: Sécurisation des accès aux différents services API.
 Solution: Implémentation d'IdentityServer avec des tokens JWT pour l'authentification et la gestion fine des autorisations basées sur les rôles utilisateurs.
 
-PS: Nous avons un gros soucis avec la partie sécurisation et surtout la Partie API UserRegistration mais la partie token sécurité ne fonctionne pas tout à fais correctement 
+PS: Nous avons un gros soucis avec la partie sécurisation et surtout la Partie API UserRegistration mais la partie token sécurité ne fonctionne pas tout à fait correctement.

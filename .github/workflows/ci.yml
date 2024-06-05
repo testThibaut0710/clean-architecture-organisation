@@ -3,58 +3,102 @@ name: CI/CD
 on:
   push:
     branches: 
-      - main
-      - release
-      - production
+      - master
+      - release/Test
   pull_request:
     branches: 
-      - main
-      - release
-      - production
+      - master
+      - release/Test
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI] # Les noms des dossiers ou des projets pour chaque API
+        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI]
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        path: release/Test
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '7.x' # Assurez-vous que c'est la version de .NET que vous utilisez
+        dotnet-version: '8.x'
 
     - name: Install dependencies
-      run: dotnet restore ${{ matrix.api }}.sln # Restaurer les dépendances pour chaque API
+      run: dotnet restore release/Test/HotelBookingSystemSolution.sln
 
     - name: Build
-      run: dotnet build ${{ matrix.api }}.sln --no-restore # Construire chaque API
+      run: dotnet build release/Test/HotelBookingSystemSolution.sln --no-restore
 
     - name: Run tests
-      run: dotnet test ${{ matrix.api }}.sln --no-build --verbosity normal # Exécuter les tests pour chaque API
+      run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal
 
-  deploy:
-    if: github.ref == 'refs/heads/release' || github.ref == 'refs/heads/production'
+    - name: Publish API
+      run: |
+        for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
+          echo "Publishing $api..."
+          dotnet publish release/Test/$api/$api.csproj -c Release -o release/Test/$api/publish/$api
+          echo "Published $api to release/Test/$api/publish/$api"
+        done
+
+  release:
+    if: github.ref == 'refs/heads/release'
     needs: build
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '7.x'
+        path: release/Test
 
-    - name: Publish to Azure
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
+        draft: false
+        prerelease: false
+
+    - name: Compress Published APIs
       run: |
-        # Ajoutez ici les commandes pour publier votre application sur Azure ou un autre service
-        # Par exemple, pour Azure Web App :
-        az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api1/bin/Release/net7.0/publish
-        az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api2/bin/Release/net7.0/publish
-        az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api3/bin/Release/net7.0/publish
+        zip -r HotelInformationAPI.zip release/Test/HotelInformationAPI/publish/HotelInformationAPI
+        zip -r RoomReservationAPI.zip release/Test/RoomReservationAPI/publish/RoomReservationAPI
+        zip -r UserRegistrationAPI.zip release/Test/UserRegistrationAPI/publish/UserRegistrationAPI
+
+    - name: Upload Release Assets - HotelInformationAPI
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./HotelInformationAPI.zip
+        asset_name: HotelInformationAPI.zip
+        asset_content_type: application/zip
+
+    - name: Upload Release Assets - RoomReservationAPI
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./RoomReservationAPI.zip
+        asset_name: RoomReservationAPI.zip
+        asset_content_type: application/zip
+
+    - name: Upload Release Assets - UserRegistrationAPI
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./UserRegistrationAPI.zip
+        asset_name: UserRegistrationAPI.zip
+        asset_content_type: application/zip
