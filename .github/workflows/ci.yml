@@ -39,7 +39,7 @@ jobs:
       run: |
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
           echo "Publishing $api..."
-          dotnet publish $api/$api.csproj -c Release -o $api/publish/$api
+          dotnet publish $api/$api.csproj -c Release -o $api/publish
         done
 
     - name: Upload Artifacts
