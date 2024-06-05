@@ -39,7 +39,7 @@ jobs:
       run: |
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
           echo "Publishing $api..."
-          dotnet publish $api/$api.csproj -c Release -o $api/publish
+          dotnet publish $api/$api.csproj -c Release -o $api/publish/$api
         done
 
     - name: Upload Artifacts
@@ -47,6 +47,6 @@ jobs:
       with:
         name: published-apis
         path: |
-          HotelInformationAPI/publish
-          RoomReservationAPI/publish
-          UserRegistrationAPI/publish
+          HotelInformationAPI/publish/HotelInformationAPI
+          RoomReservationAPI/publish/RoomReservationAPI
+          UserRegistrationAPI/publish/UserRegistrationAPI
