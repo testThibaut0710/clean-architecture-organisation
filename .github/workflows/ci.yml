@@ -40,6 +40,9 @@ jobs:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
 
+    - name: Run Blazor App
+      run: dotnet run --project BlazorAppFrontend/BlazorAppFrontend.csproj
+
     - name: Run tests Selenium
       run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
       env:
