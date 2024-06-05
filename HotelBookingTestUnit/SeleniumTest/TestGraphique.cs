@@ -27,7 +27,6 @@ public class TestGraphique
     }
 
     [TestMethod]
-    [TestCategory("UITest")]
     public void TestLogin()
     {
         baseUrl = "http://localhost:5000/login";
@@ -64,7 +63,6 @@ public class TestGraphique
     }
 
     [TestMethod]
-    [TestCategory("UITest")]
     public void TestRegister()
     {
         baseUrl = "http://localhost:5000/register";
@@ -135,9 +133,9 @@ public class TestGraphique
     private async Task StartApi()
     {
         string workingDirectory = Directory.GetCurrentDirectory();
-        Debug.WriteLine(workingDirectory);
+
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
-        string apiProjectDirectory = Path.Combine(projectDirectory, "UserRegistrationAPI/");
+        string apiProjectDirectory = Path.Combine(projectDirectory, "UserRegistrationAPI");
         Debug.WriteLine(apiProjectDirectory);
 
         var startInfo = new ProcessStartInfo
@@ -166,9 +164,9 @@ public class TestGraphique
     private async Task StartBlazorApp()
     {
         string workingDirectory = Directory.GetCurrentDirectory();
-        Debug.WriteLine(workingDirectory);
+        
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
-        string blazorAppDirectory = Path.Combine(projectDirectory, "BlazorAppFrontend/");
+        string blazorAppDirectory = Path.Combine(projectDirectory, "BlazorAppFrontend");
         Debug.WriteLine(blazorAppDirectory);
 
         var startInfo = new ProcessStartInfo
