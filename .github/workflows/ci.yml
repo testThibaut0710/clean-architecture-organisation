@@ -38,6 +38,7 @@ jobs:
       run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
+        DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
 
     - name: Publish API
       run: |
