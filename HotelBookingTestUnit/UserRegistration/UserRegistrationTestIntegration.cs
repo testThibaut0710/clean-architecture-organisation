@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using RoomReservationAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +23,25 @@ namespace TestIntegration
         private static CustomWebApplicationFactoryUserRegistration<Program> _factory;
         private HttpClient _client;
 
-        
+        private string GenerateJwtToken()
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("f1e2d3c4b5a697867564738291a3b2c1")); // Replace with your actual secret key
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Role, "user")
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: "your_issuer",  // Replace with your issuer
+                audience: "your_audience",  // Replace with your audience (if needed)
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(30), // Set a suitable expiration time
+                signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
 
         [ClassInitialize]
         public static void ClassInit(TestContext context)
@@ -32,7 +52,9 @@ namespace TestIntegration
         [TestInitialize]
         public void TestInit()
         {
+            var token = GenerateJwtToken();
             _client = _factory.CreateClient();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
         [TestMethod]
