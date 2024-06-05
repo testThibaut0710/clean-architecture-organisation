@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI]
+        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI]  # Les noms des dossiers ou des projets pour chaque API
 
     steps:
     - name: Checkout repository
