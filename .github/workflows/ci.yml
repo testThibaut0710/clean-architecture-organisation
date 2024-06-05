@@ -3,21 +3,19 @@ name: CI/CD
 on:
   push:
     branches: 
-      - main
+      - master
       - release
-      - production
   pull_request:
     branches: 
-      - main
+      - master
       - release
-      - production
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI] # Les noms des dossiers ou des projets pour chaque API
+        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI]  # Les noms des dossiers ou des projets pour chaque API
 
     steps:
     - name: Checkout repository
@@ -26,35 +24,60 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '7.x' # Assurez-vous que c'est la version de .NET que vous utilisez
+        dotnet-version: '8.x'
 
     - name: Install dependencies
-      run: dotnet restore ${{ matrix.api }}.sln # Restaurer les dépendances pour chaque API
+      run: dotnet restore HotelBookingSystemSolution.sln
 
     - name: Build
-      run: dotnet build ${{ matrix.api }}.sln --no-restore # Construire chaque API
+      run: dotnet build HotelBookingSystemSolution.sln --no-restore
 
     - name: Run tests
-      run: dotnet test ${{ matrix.api }}.sln --no-build --verbosity normal # Exécuter les tests pour chaque API
+      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal
 
-  deploy:
-    if: github.ref == 'refs/heads/release' || github.ref == 'refs/heads/production'
-    needs: build
+    - name: Publish API
+      run: |
+        for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
+          echo "Publishing $api..."
+          dotnet publish $api/$api.csproj -c Release -o $api/publish/$api
+          echo "Published $api to $api/publish/$api"
+        done
+
+  release:
+    if: github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v2
+    - name: Upload Release Assets - HotelInformationAPI
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
       with:
-        dotnet-version: '7.x'
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: HotelInformationAPI/publish/HotelInformationAPI
+        asset_name: HotelInformationAPI.zip
+        asset_content_type: application/zip
 
-    - name: Publish to Azure
-      run: |
-        # Ajoutez ici les commandes pour publier votre application sur Azure ou un autre service
-        # Par exemple, pour Azure Web App :
-        az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api1/bin/Release/net7.0/publish
-        az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api2/bin/Release/net7.0/publish
-        az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api3/bin/Release/net7.0/publish
+    - name: Upload Release Assets - RoomReservationAPI
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: RoomReservationAPI/publish/RoomReservationAPI
+        asset_name: RoomReservationAPI.zip
+        asset_content_type: application/zip
+
+    - name: Upload Release Assets - UserRegistrationAPI
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: UserRegistrationAPI/publish/UserRegistrationAPI
+        asset_name: UserRegistrationAPI.zip
+        asset_content_type: application/zip
