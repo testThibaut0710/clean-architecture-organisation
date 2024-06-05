@@ -131,19 +131,18 @@ public class TestGraphique
         }
 
     }
-    
+
     private async Task StartApi()
     {
         string workingDirectory = Directory.GetCurrentDirectory();
-
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
         string apiProjectDirectory = Path.Combine(projectDirectory, "UserRegistrationAPI");
         Debug.WriteLine(apiProjectDirectory);
 
         var startInfo = new ProcessStartInfo
         {
-            FileName = "cmd.exe",
-            RedirectStandardInput = true,
+            FileName = "dotnet",
+            Arguments = "run",
             WorkingDirectory = apiProjectDirectory,
             UseShellExecute = false
         };
@@ -151,30 +150,22 @@ public class TestGraphique
         apiProcess = new Process { StartInfo = startInfo };
         apiProcess.Start();
 
-        using (var sw = apiProcess.StandardInput)
-        {
-            if (sw.BaseStream.CanWrite)
-            {
-                sw.WriteLine("dotnet run");
-            }
-        }
-        await Task.Delay(5000);
+        await Task.Delay(5000); // Attendre que l'API démarre
         int processId = apiProcess.Id;
-
-        Debug.WriteLine("Processus API démarré avec succès" + processId);
+        Debug.WriteLine("Processus API démarré avec succès. PID : " + processId);
     }
+
     private async Task StartBlazorApp()
     {
         string workingDirectory = Directory.GetCurrentDirectory();
-        
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
         string blazorAppDirectory = Path.Combine(projectDirectory, "BlazorAppFrontend");
         Debug.WriteLine(blazorAppDirectory);
 
         var startInfo = new ProcessStartInfo
         {
-            FileName = "cmd.exe",
-            RedirectStandardInput = true,
+            FileName = "dotnet",
+            Arguments = "run",
             WorkingDirectory = blazorAppDirectory,
             UseShellExecute = false
         };
@@ -182,16 +173,9 @@ public class TestGraphique
         blazorProcess = new Process { StartInfo = startInfo };
         blazorProcess.Start();
 
-        using (var sw = blazorProcess.StandardInput)
-        {
-            if (sw.BaseStream.CanWrite)
-            {
-                sw.WriteLine("dotnet run");
-            }
-        }
-
         await Task.Delay(5000); // Attendre que l'application Blazor démarre
         int processId = blazorProcess.Id;
-        Debug.WriteLine("Processus Blazor démarré avec succès. PID : " + blazorProcess);
+        Debug.WriteLine("Processus Blazor démarré avec succès. PID : " + processId);
     }
+
 }
