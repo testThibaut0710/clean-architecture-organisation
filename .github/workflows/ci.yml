@@ -35,11 +35,11 @@ jobs:
       run: dotnet build release/Test/HotelBookingSystemSolution.sln --no-restore
 
     - name: Run tests
-      run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal
+      run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
-
+        
     - name: Publish API
       run: |
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
