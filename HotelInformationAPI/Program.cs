@@ -23,7 +23,7 @@ namespace HotelInformationAPI
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<HotelContext>(opts =>
             {
-                opts.UseMySQL(builder.Configuration.GetConnectionString(builder.Configuration["DB_STRING_SECRET"]));
+                opts.UseMySQL(builder.Configuration["DB_STRING_SECRET"]);
             });
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>

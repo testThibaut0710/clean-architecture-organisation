@@ -166,7 +166,7 @@ public class TestGraphique
     private async Task StartBlazorApp()
     {
         string workingDirectory = Directory.GetCurrentDirectory();
-        
+        Debug.WriteLine(workingDirectory);
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
         string blazorAppDirectory = Path.Combine(projectDirectory, "BlazorAppFrontend");
         Debug.WriteLine(blazorAppDirectory);
