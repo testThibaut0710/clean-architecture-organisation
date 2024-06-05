@@ -39,7 +39,10 @@ jobs:
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
-
+        
+    - name: List files in repository root
+      run: ls $GITHUB_WORKSPACE/
+      
     - name: Run Blazor App
       run: dotnet run --project BlazorAppFrontend/BlazorAppFrontend.csproj
 
