@@ -1,0 +1,109 @@
+# Visual Studio Code
+.vscode/
+
+# Visual Studio built/compiled files
+bin/
+obj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider built/compiled files
+.idea/
+*.sln.iml
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+bin/
+*.exe
+*.pdb
+*.dll
+*.zip
+*.json
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio IntelliSense
+.vs/
+.nuget/
+*.code-workspace
+*.vspscc
+*.vssscc
+.vscode/
+*.vscode/
+
+# Rider files
+.idea/
+*.sln.iml
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# MonoDevelop
+*.pidb
+*.userprefs
+
+# ReSharper
+_ReSharper*/
+*.sln.DotSettings.user
+
+# NCrunch
+*.ncrunch*
+.*crunch*.local.xml
+
+# Visual Studio Code
+.vscode/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Unity3D generated metadata files
+Library/
+Temp/
+UnityGenerated/
+
+# Unity3D build logs
+Logs/
