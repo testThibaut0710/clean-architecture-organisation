@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI] # Les noms des dossiers ou des projets pour chaque API
+        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI]
 
     steps:
     - name: Checkout repository
@@ -24,29 +24,60 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.x' # Utilisation de .NET 8
+        dotnet-version: '8.x'
 
     - name: Install dependencies
-      run: dotnet restore HotelBookingSystemSolution.sln # Restaurer les dépendances pour la solution entière
+      run: dotnet restore HotelBookingSystemSolution.sln
 
     - name: Build
-      run: dotnet build HotelBookingSystemSolution.sln --no-restore # Construire la solution entière
+      run: dotnet build HotelBookingSystemSolution.sln --no-restore
 
     - name: Run tests
-      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal # Exécuter les tests pour la solution entière
+      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal
 
     - name: Publish API
       run: |
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
           echo "Publishing $api..."
-          dotnet publish $api/$api.csproj -c Release -o $api/publish
+          dotnet publish $api/$api.csproj -c Release -o $api/publish/$api
+          echo "Published $api to $api/publish/$api"
         done
 
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v3
+  release:
+    if: github.ref == 'refs/heads/release'
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Upload Release Assets - HotelInformationAPI
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
       with:
-        name: published-apis
-        path: |
-          HotelInformationAPI/publish/HotelInformationAPI
-          RoomReservationAPI/publish/RoomReservationAPI
-          UserRegistrationAPI/publish/UserRegistrationAPI
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: HotelInformationAPI/publish/HotelInformationAPI
+        asset_name: HotelInformationAPI.zip
+        asset_content_type: application/zip
+
+    - name: Upload Release Assets - RoomReservationAPI
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: RoomReservationAPI/publish/RoomReservationAPI
+        asset_name: RoomReservationAPI.zip
+        asset_content_type: application/zip
+
+    - name: Upload Release Assets - UserRegistrationAPI
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: UserRegistrationAPI/publish/UserRegistrationAPI
+        asset_name: UserRegistrationAPI.zip
+        asset_content_type: application/zip
