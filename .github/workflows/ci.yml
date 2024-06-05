@@ -41,7 +41,7 @@ jobs:
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
 
     - name: Run tests Selenium
-      run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory==UITest
+      run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
