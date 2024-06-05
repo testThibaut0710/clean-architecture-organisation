@@ -27,6 +27,7 @@ public class TestGraphique
     }
 
     [TestMethod]
+    [TestCategory("UITest")]
     public void TestLogin()
     {
         baseUrl = "http://localhost:5000/login";
@@ -63,6 +64,7 @@ public class TestGraphique
     }
 
     [TestMethod]
+    [TestCategory("UITest")]
     public void TestRegister()
     {
         baseUrl = "http://localhost:5000/register";
