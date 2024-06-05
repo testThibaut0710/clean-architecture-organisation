@@ -137,7 +137,7 @@ public class TestGraphique
         string workingDirectory = Directory.GetCurrentDirectory();
 
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
-        string apiProjectDirectory = Path.Combine(projectDirectory, "UserRegistrationAPI");
+        string apiProjectDirectory = Path.Combine(projectDirectory, "UserRegistrationAPI/");
         Debug.WriteLine(apiProjectDirectory);
 
         var startInfo = new ProcessStartInfo
@@ -168,7 +168,7 @@ public class TestGraphique
         string workingDirectory = Directory.GetCurrentDirectory();
         Debug.WriteLine(workingDirectory);
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
-        string blazorAppDirectory = Path.Combine(projectDirectory, "BlazorAppFrontend");
+        string blazorAppDirectory = Path.Combine(projectDirectory, "BlazorAppFrontend/");
         Debug.WriteLine(blazorAppDirectory);
 
         var startInfo = new ProcessStartInfo
