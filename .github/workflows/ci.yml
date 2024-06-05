@@ -47,7 +47,7 @@ jobs:
       run: dotnet run --project $GITHUB_WORKSPACE/release/Test/BlazorAppFrontend/BlazorAppFrontend.csproj  &
     
     - name: Run API
-      run: dotnet run --project $GITHUB_WORKSPACE/release/Test/UserRegistrationAPI/UserRegistrationAPI.csproj --urls=http://localhost:5090/api/ &
+      run: dotnet run --project $GITHUB_WORKSPACE/release/Test/UserRegistrationAPI/UserRegistrationAPI.csproj &
 
     - name: Run tests Selenium
       run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
