@@ -41,7 +41,7 @@ jobs:
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
         
     - name: List files in repository root
-      run: ls $GITHUB_WORKSPACE/release
+      run: ls $GITHUB_WORKSPACE/release/Test
       
     - name: Run Blazor App
       run: dotnet run --project BlazorAppFrontend/BlazorAppFrontend.csproj
