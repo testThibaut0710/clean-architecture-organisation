@@ -52,9 +52,7 @@ namespace TestIntegration
         [TestInitialize]
         public void TestInit()
         {
-            var token = GenerateJwtToken();
             _client = _factory.CreateClient();
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
         [TestMethod]
@@ -69,7 +67,8 @@ namespace TestIntegration
                 Role = "user",
                 PasswordClear = "password123" // At least 8 characters
             };
-
+            var token = GenerateJwtToken();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var content = new StringContent(JsonConvert.SerializeObject(userDTO), Encoding.UTF8, "application/json");
 
             // Act
@@ -91,7 +90,8 @@ namespace TestIntegration
                 
             };
             // Arrange
-
+            var token = GenerateJwtToken();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var content = new StringContent(JsonConvert.SerializeObject(userDTO), Encoding.UTF8, "application/json");
 
             // Act
@@ -111,7 +111,8 @@ namespace TestIntegration
                 UserName = "testuser",
                 Password = "password123"
             };
-
+            var token = GenerateJwtToken();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var content = new StringContent(JsonConvert.SerializeObject(userDTOLogin), Encoding.UTF8, "application/json");
 
             // Act
@@ -137,7 +138,8 @@ namespace TestIntegration
                 UserName = "testuser",
                 Password = "invalidpassword" // Provide an invalid password
             };
-
+            var token = GenerateJwtToken();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var content = new StringContent(JsonConvert.SerializeObject(userDTO), Encoding.UTF8, "application/json");
 
             // Act
