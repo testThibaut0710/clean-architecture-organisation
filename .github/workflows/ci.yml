@@ -50,33 +50,3 @@ jobs:
           HotelInformationAPI/publish
           RoomReservationAPI/publish
           UserRegistrationAPI/publish
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '8.x'
-
-    - name: Download Artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: published-apis
-        path: ./ # Téléchargez les artifacts à la racine
-
-    - name: Publish to Azure
-      env:
-        AZURE_WEBAPP_NAME: clean-architecture 
-        AZURE_RESOURCE_GROUP: clean-archi
-        AZURE_PUBLISH_PROFILE: ${{ secrets.TEST_SECRET }} # Assurez-vous d'ajouter votre profil de publication en tant que secret GitHub
-      run: |
-        for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
-          dotnet publish $api/$api.csproj -c Release -o $api/publish
-          az webapp deploy --name $AZURE_WEBAPP_NAME --resource-group $AZURE_RESOURCE_GROUP --src-path $api/publish
-        done
