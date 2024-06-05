@@ -4,6 +4,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace TestGraphique;
 
@@ -20,21 +21,20 @@ public class TestGraphique
     public async Task Setup()
     {
         // Initialise le pilote Chrome
-
-        ChromeOptions options = new ChromeOptions();
-        options.BinaryLocation = @"C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe"; // Chemin vers l'exécutable Brave
-        driver = new ChromeDriver();
-        baseUrl = "http://localhost:5136/login";
         await StartBlazorApp();
-        driver.Navigate().GoToUrl(baseUrl);
+        driver = new ChromeDriver();
         await StartApi();
     }
 
     [TestMethod]
     public void TestLogin()
     {
+        baseUrl = "http://localhost:59348/login";
+        driver.Navigate().GoToUrl(baseUrl);
+        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5000));
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(500000);
         IWebElement revealed = driver.FindElement(By.Id("login"));
-        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(500));
+        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(500));
         // Ouvrir la page de connexion
         wait.Until(d => revealed.Displayed);
         wait.Until(driver => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
@@ -62,12 +62,16 @@ public class TestGraphique
         // OU Assert.IsTrue(driver.FindElement(By.Id("element_sur_la_page_de_destination")).Displayed);
     }
 
+    [TestMethod]
     public void TestRegister()
     {
+        baseUrl = "http://localhost:59348/register";
+        driver.Navigate().GoToUrl(baseUrl);
         // Saisir les informations de registration
+        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5000));
         driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(500000);
         IWebElement usernameField = driver.FindElement(By.Id("userName"));
-        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(500000));
+        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(500000));
         usernameField.SendKeys("NewTestUser");
 
         IWebElement passwordField = driver.FindElement(By.Id("passwordClear"));
@@ -128,7 +132,11 @@ public class TestGraphique
     
     private async Task StartApi()
     {
-        var apiProjectDirectory = @"C:\Users\jlol0\source\repos\clean-architecture-v4\UserRegistrationAPI";
+        string workingDirectory = Directory.GetCurrentDirectory();
+
+        string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
+        string apiProjectDirectory = Path.Combine(projectDirectory, "UserRegistrationAPI");
+        Debug.WriteLine(apiProjectDirectory);
 
         var startInfo = new ProcessStartInfo
         {
@@ -155,13 +163,17 @@ public class TestGraphique
     }
     private async Task StartBlazorApp()
     {
-        var blazorProjectDirectory = @"C:\Users\jlol0\source\repos\clean-architecture-v4\BlazorAppFrontend";
+        string workingDirectory = Directory.GetCurrentDirectory();
+        
+        string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
+        string blazorAppDirectory = Path.Combine(projectDirectory, "BlazorAppFrontend");
+        Debug.WriteLine(blazorAppDirectory);
 
         var startInfo = new ProcessStartInfo
         {
             FileName = "cmd.exe",
             RedirectStandardInput = true,
-            WorkingDirectory = blazorProjectDirectory,
+            WorkingDirectory = blazorAppDirectory,
             UseShellExecute = false
         };
 
