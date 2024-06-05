@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI]
+        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI] # Les noms des dossiers ou des projets pour chaque API
 
     steps:
     - name: Checkout repository
@@ -35,6 +35,22 @@ jobs:
     - name: Run tests
       run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal # Exécuter les tests pour la solution entière
 
+    - name: Publish API
+      run: |
+        for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
+          echo "Publishing $api..."
+          dotnet publish $api/$api.csproj -c Release -o $api/publish
+        done
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: published-apis
+        path: |
+          HotelInformationAPI/publish
+          RoomReservationAPI/publish
+          UserRegistrationAPI/publish
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -48,16 +64,11 @@ jobs:
       with:
         dotnet-version: '8.x'
 
-    - name: Log branch name
-      run: echo "Current branch is ${{ github.ref }}"
-
-    - name: Log condition
-      run: |
-        if [[ "${{ github.ref }}" == "refs/heads/release" ]]; then
-          echo "Condition met for deployment"
-        else
-          echo "Condition not met for deployment"
-        fi
+    - name: Download Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: published-apis
+        path: ./ # Téléchargez les artifacts à la racine
 
     - name: Publish to Azure
       env:
