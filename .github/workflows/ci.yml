@@ -44,7 +44,7 @@ jobs:
       run: ls $GITHUB_WORKSPACE/release/Test/BlazorAppFrontend
       
     - name: Run Blazor App
-      run: dotnet run --project BlazorAppFrontend/BlazorAppFrontend.csproj
+      run: dotnet run --project $GITHUB_WORKSPACE/release/Test/BlazorAppFrontend/BlazorAppFrontend.csproj
 
     - name: Run tests Selenium
       run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
