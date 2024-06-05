@@ -21,9 +21,7 @@ public class TestGraphique
     public async Task Setup()
     {
         // Initialise le pilote Chrome
-        await StartBlazorApp();
         driver = new ChromeDriver();
-        await StartApi();
     }
 
     [TestMethod]
