@@ -28,9 +28,10 @@ public class TestGraphique
     [TestCategory("UITest")]
     public void TestLogin()
     {
-        baseUrl = "http://localhost:59348/login";
+        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(50000));
+        baseUrl = "http://localhost:5000/login";
         driver.Navigate().GoToUrl(baseUrl);
-        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5000));
+        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5000));
         driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(500000);
         IWebElement revealed = driver.FindElement(By.Id("login"));
         wait = new WebDriverWait(driver, TimeSpan.FromSeconds(500));
@@ -65,7 +66,7 @@ public class TestGraphique
     [TestCategory("UITest")]
     public void TestRegister()
     {
-        baseUrl = "http://localhost:59348/register";
+        baseUrl = "http://localhost:5000/register";
         driver.Navigate().GoToUrl(baseUrl);
         // Saisir les informations de registration
         WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5000));

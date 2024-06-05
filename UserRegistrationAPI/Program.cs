@@ -7,7 +7,6 @@ using UserRegistrationAPI.Models;
 using UserRegistrationAPI.Models.DTO;
 using UserRegistrationAPI.Services;
 
-
 namespace UserRegistrationAPI
 {
     public class Program
@@ -40,6 +39,7 @@ namespace UserRegistrationAPI
             builder.Services.AddScoped<IUserRepo<User, string>, UserRepo>();
             builder.Services.AddScoped<IService<UserRegisterDTO, UserDTO>, UserService>();
             builder.Services.AddScoped<ITokenGenerate<UserDTO, string>, TokenService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -54,6 +54,9 @@ namespace UserRegistrationAPI
 
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.MapControllers();
+
+            var url = Environment.GetEnvironmentVariable("API_URL") ?? "http://localhost:5080";
+            app.Urls.Add(url);
 
             app.Run();
         }
