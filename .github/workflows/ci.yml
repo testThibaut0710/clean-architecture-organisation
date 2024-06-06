@@ -13,9 +13,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI]
+    #strategy:
+      #matrix:
+        #api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI]
 
     steps:
     - name: Checkout repository
@@ -58,17 +58,11 @@ jobs:
         
     - name: Publish API
       run: |
-          echo "Publishing HotelInformationAPI..."
-          dotnet publish release/Test/HotelInformationAPI/HotelInformationAPI.csproj -c Release -o release/Test/HotelInformationAPI/publish/HotelInformationAPI
-          echo "Published HotelInformationAPI to release/Test/HotelInformationAPI/publish/HotelInformationAPI"
-          
-          echo "Publishing RoomReservationAPI..."
-          dotnet publish release/Test/RoomReservationAPI/RoomReservationAPI.csproj -c Release -o release/Test/RoomReservationAPI/publish/RoomReservationAPI
-          echo "Published RoomReservationAPI to release/Test/RoomReservationAPI/publish/RoomReservationAPI"
-          echo "Publishing RoomReservationAPI..."
-          
-          dotnet publish release/Test/UserRegistrationAPI/UserRegistrationAPI.csproj -c Release -o release/Test/UserRegistrationAPI/publish/UserRegistrationAPI
-          echo "Published UserRegistrationAPI to release/Test/UserRegistrationAPI/publish/UserRegistrationAPI"
+        for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
+          echo "Publishing $api..."
+          dotnet publish release/Test/$api/$api.csproj -c Release -o release/Test/$api/publish/$api
+          echo "Published $api to release/Test/$api/publish/$api"
+        done
     
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
