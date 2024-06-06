@@ -20,8 +20,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-      with:
-        path: release/Test
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
@@ -51,7 +49,7 @@ jobs:
 
     - name: Run tests Selenium
       run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
-      continue-on-error: true  # Permet de continuer même si cette étape échoue
+      continue-on-error: true
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
@@ -76,7 +74,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         tag_name: v${{ github.run_number }}
         release_name: Release ${{ github.run_number }}
@@ -92,7 +90,7 @@ jobs:
     - name: Upload Release Assets - HotelInformationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./HotelInformationAPI.zip
@@ -102,7 +100,7 @@ jobs:
     - name: Upload Release Assets - RoomReservationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./RoomReservationAPI.zip
@@ -112,7 +110,7 @@ jobs:
     - name: Upload Release Assets - UserRegistrationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./UserRegistrationAPI.zip
