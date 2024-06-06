@@ -82,7 +82,7 @@ jobs:
     - name: Download build artifacts
       uses: actions/download-artifact@v4
       with:
-        name: my-release_artifact
+        name: release_artifact
 
     - name: Create GitHub Release
       id: create_release
