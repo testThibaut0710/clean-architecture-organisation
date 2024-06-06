@@ -20,6 +20,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        path: release/Test
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
