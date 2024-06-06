@@ -76,7 +76,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         tag_name: v${{ github.run_number }}
         release_name: Release ${{ github.run_number }}
