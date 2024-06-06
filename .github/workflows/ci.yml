@@ -92,7 +92,7 @@ jobs:
     - name: Upload Release Assets - HotelInformationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./HotelInformationAPI.zip
@@ -102,7 +102,7 @@ jobs:
     - name: Upload Release Assets - RoomReservationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./RoomReservationAPI.zip
@@ -112,7 +112,7 @@ jobs:
     - name: Upload Release Assets - UserRegistrationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./UserRegistrationAPI.zip
