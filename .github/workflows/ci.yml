@@ -69,9 +69,9 @@ jobs:
 
     - name: Compress Published APIs
       run: |
-        zip -r HotelInformationAPI.zip release/Test/HotelInformationAPI/publish/HotelInformationAPI
-        zip -r RoomReservationAPI.zip release/Test/RoomReservationAPI/publish/RoomReservationAPI
-        zip -r UserRegistrationAPI.zip release/Test/UserRegistrationAPI/publish/UserRegistrationAPI
+        zip -r HotelInformationAPI.zip ./HotelInformationAPI/publish/HotelInformationAPI
+        zip -r RoomReservationAPI.zip ./RoomReservationAPI/publish/RoomReservationAPI
+        zip -r UserRegistrationAPI.zip ./UserRegistrationAPI/publish/UserRegistrationAPI
 
     - name: Upload Release Assets - HotelInformationAPI
       uses: actions/upload-release-asset@v1
