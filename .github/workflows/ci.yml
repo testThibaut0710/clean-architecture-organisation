@@ -86,6 +86,10 @@ jobs:
     - name: Compress Published APIs
       run: |
         ls
+        cd ./HotelInformationAPI/
+        ls
+        cd ./publish/
+        ls
         zip -r HotelInformationAPI.zip ./HotelInformationAPI/publish/HotelInformationAPI
         zip -r RoomReservationAPI.zip ./RoomReservationAPI/publish/RoomReservationAPI
         zip -r UserRegistrationAPI.zip ./UserRegistrationAPI/publish/UserRegistrationAPI
