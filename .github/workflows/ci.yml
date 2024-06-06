@@ -37,19 +37,19 @@ jobs:
         unzip chromedriver_linux64.zip
         sudo mv chromedriver /usr/local/bin/
 
-    - name: Install dependencies
+    - name: Install Dependencies
       run: dotnet restore release/Test/HotelBookingSystemSolution.sln
 
     - name: Build
       run: dotnet build release/Test/HotelBookingSystemSolution.sln --no-restore
 
-    - name: Run tests non graphic
+    - name: Run Tests noN Graphic
       run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
 
-    - name: Run tests Selenium
+    - name: Run Tests Selenium
       run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
       continue-on-error: true
       env:
@@ -63,6 +63,13 @@ jobs:
           dotnet publish release/Test/$api/$api.csproj -c Release -o release/Test/$api/publish/$api
           echo "Published $api to release/Test/$api/publish/$api"
         done
+    
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: release_artifact
+        path: release/Test/
+        retention-days: 5
 
   release:
     needs: build
@@ -71,6 +78,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: my-release_artifact
 
     - name: Create GitHub Release
       id: create_release
@@ -82,17 +94,19 @@ jobs:
         release_name: Release ${{ github.run_number }}
         draft: false
         prerelease: false
+        
 
     - name: Compress Published APIs
       run: |
         ls
         cd ./HotelInformationAPI/
         ls
+        
         cd ./publish/
         ls
-        zip -r HotelInformationAPI.zip ./HotelInformationAPI/publish/HotelInformationAPI
-        zip -r RoomReservationAPI.zip ./RoomReservationAPI/publish/RoomReservationAPI
-        zip -r UserRegistrationAPI.zip ./UserRegistrationAPI/publish/UserRegistrationAPI
+        zip -r HotelInformationAPI.zip release/Test/HotelInformationAPI/publish/HotelInformationAPI
+        zip -r RoomReservationAPI.zip release/Test/RoomReservationAPI/publish/RoomReservationAPI
+        zip -r UserRegistrationAPI.zip release/Test/UserRegistrationAPI/publish/UserRegistrationAPI
 
     - name: Upload Release Assets - HotelInformationAPI
       uses: actions/upload-release-asset@v1
