@@ -139,7 +139,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          path: ./release/Test/
  
       - name: Install redoc-cli
         run: npm install -g redoc-cli
