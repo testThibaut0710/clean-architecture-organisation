@@ -142,6 +142,9 @@ jobs:
  
       - name: Install redoc-cli
         run: npm install -g redoc-cli
+      
+      - name: Create public directory
+        run: mkdir -p public
  
       - name: Generate HTML from openapi.json
         run: redoc-cli bundle -o public/index.html ./openapi.json
