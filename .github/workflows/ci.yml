@@ -103,6 +103,7 @@ jobs:
         zip -r RoomReservationAPI.zip release/Test/RoomReservationAPI/publish/RoomReservationAPI
         zip -r UserRegistrationAPI.zip release/Test/UserRegistrationAPI/publish/UserRegistrationAPI
 
+    
     - name: Upload Release Assets - HotelInformationAPI
       uses: actions/upload-release-asset@v1
       env:
@@ -132,3 +133,22 @@ jobs:
         asset_path: ./UserRegistrationAPI.zip
         asset_name: UserRegistrationAPI.zip
         asset_content_type: application/zip
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+ 
+    - name: Install redoc-cli
+      run: npm install -g redoc-cli
+ 
+    - name: Generate HTML from openapi.json
+      run: redoc-cli bundle -o public/index.html openapi.json
+ 
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.MAX_TOKEN }}
+        publish_dir: ./public
+
+        
