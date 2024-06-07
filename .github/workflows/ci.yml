@@ -58,3 +58,21 @@ jobs:
         az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api1/bin/Release/net7.0/publish
         az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api2/bin/Release/net7.0/publish
         az webapp deploy --name your-app-name --resource-group your-resource-group --src-path ${{ github.workspace }}/Api3/bin/Release/net7.0/publish
+      continue-on-error: true
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+ 
+    - name: Install redoc-cli
+      run: npm install -g redoc-cli
+ 
+    - name: Generate HTML from openapi.json
+      run: redoc-cli bundle -o public/index.html openapi.json
+ 
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.MAX_TOKEN }}
+        publish_dir: ./public
