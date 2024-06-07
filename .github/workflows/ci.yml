@@ -12,12 +12,14 @@ on:
 
 jobs:
   deploy_pages:
+    needs: release
     runs-on: ubuntu-latest
     steps:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+          path: release/Test/
  
       - name: Install redoc-cli
         run: npm install -g redoc-cli
