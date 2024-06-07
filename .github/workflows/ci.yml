@@ -11,12 +11,28 @@ on:
       - release/Test
 
 jobs:
+  deploy_pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+ 
+      - name: Install redoc-cli
+        run: npm install -g redoc-cli
+ 
+      - name: Generate HTML from openapi.json
+        run: redoc-cli bundle -o public/index.html openapi.json
+ 
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.MAX_TOKEN }}
+          publish_dir: ./public
+        
   build:
     runs-on: ubuntu-latest
-    #strategy:
-      #matrix:
-        #api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI]
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -133,22 +149,9 @@ jobs:
         asset_path: ./UserRegistrationAPI.zip
         asset_name: UserRegistrationAPI.zip
         asset_content_type: application/zip
+
     
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
- 
-    - name: Install redoc-cli
-      run: npm install -g redoc-cli
- 
-    - name: Generate HTML from openapi.json
-      run: redoc-cli bundle -o public/index.html openapi.json
- 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.MAX_TOKEN }}
-        publish_dir: ./public
+    
+
 
         
