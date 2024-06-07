@@ -132,9 +132,9 @@ jobs:
         asset_content_type: application/zip
 
   deploy_pages:
-    needs: release
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -142,9 +142,6 @@ jobs:
  
       - name: Install redoc-cli
         run: npm install -g redoc-cli
-      
-      - name: Create public directory
-        run: mkdir -p public
  
       - name: Generate HTML from openapi.json
         run: redoc-cli bundle -o public/index.html ./openapi.json
