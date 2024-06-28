@@ -5,6 +5,7 @@ on:
     branches:
       - master
 
+
 jobs:
   build:
     name: Build and analyze
@@ -40,6 +41,6 @@ jobs:
       - name: Build and analyze
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"testThibaut0710_clean-architecture-organisation_88176ffc-838f-4c5e-ab73-bfcaa915386b" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"testThibaut0710_clean-architecture-organisation_27b685f1-a34a-4e6a-aabc-b49778a4cfd5" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
           dotnet build
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
