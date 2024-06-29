@@ -58,7 +58,5 @@ jobs:
       - name: Get commit details
         id: commit-details
         run: |
-          COMMIT_URL=$(echo "$GITHUB_EVENT_PATH" | jq -r .commits_url)
-          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" $COMMIT_URL > commit.json
-          COMMIT_EMAIL=$(jq -r '.[0].commit.author.email' commit.json)
+          COMMIT_EMAIL=$(git log -1 --pretty=format:'%ae')
           echo "Committer email is $COMMIT_EMAIL"
