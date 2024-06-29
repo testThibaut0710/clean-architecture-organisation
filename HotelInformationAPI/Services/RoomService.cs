@@ -18,9 +18,9 @@ namespace HotelInformationAPI.Services
             var add = _roomRepo.Add(item);
             if (add != null)
                 return item;
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
 
         public RoomDTO Delete(RoomDTO item)
@@ -28,9 +28,9 @@ namespace HotelInformationAPI.Services
             var delete = _roomRepo.Delete(item);
             if (delete != null)
                 return item;
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
     }
 }

@@ -17,9 +17,9 @@ namespace HotelInformationAPI.Services
             var hotels = _depotHotel.GetAll();
             if (hotels != null)
                 return hotels;
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
 
         public ICollection<Hotel> GetByLocation(string localisation)
@@ -39,9 +39,9 @@ namespace HotelInformationAPI.Services
                 }
                 return hotels;
             }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
 
         public ICollection<Hotel> GetByPriceRange(double gammePrix)
@@ -59,9 +59,9 @@ namespace HotelInformationAPI.Services
                 }
                 return hotels;
             }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
 
         public int GetCount(string nomHotel)

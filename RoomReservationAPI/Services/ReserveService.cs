@@ -17,9 +17,9 @@ namespace RoomReservationAPI.Services
             var book = _repo.Book(item);
             if (book != null)
                 return book;
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
 
         }
 
@@ -28,9 +28,9 @@ namespace RoomReservationAPI.Services
             var cancel = _repo.Cancel(item);
             if (cancel != null)
                 return cancel;
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
     }
 }

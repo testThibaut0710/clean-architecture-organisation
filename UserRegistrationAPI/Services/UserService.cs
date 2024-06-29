@@ -25,18 +25,18 @@ namespace UserRegistrationAPI.Services
             var userData = _userRepo.Get(userDTO.UserName);
             if (userData != null)
             {
-#pragma warning disable CS8604 // Existence possible d'un argument de référence null.
+
                 var hmac = new HMACSHA512(userData.HashKey);
-#pragma warning restore CS8604 // Existence possible d'un argument de référence null.
+
                 var userPass = hmac.ComputeHash(Encoding.UTF8.GetBytes(userDTO.Password));
                 for (int i = 0; i < userPass.Length; i++)
                 {
 #pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                     if (userPass[i] != userData.Password[i])
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
                         return null;
 #pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
                 }
 #pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
                 user = new UserDTO
@@ -47,9 +47,9 @@ namespace UserRegistrationAPI.Services
 #pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
                 user.Token = _tokenGenerate.GenerateToken(user);
             }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return user;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
 
         public UserDTO Register(UserRegisterDTO userDTO)
@@ -72,9 +72,9 @@ namespace UserRegistrationAPI.Services
 #pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
                 user.Token = _tokenGenerate.GenerateToken(user);
             }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return user;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
     }
 }

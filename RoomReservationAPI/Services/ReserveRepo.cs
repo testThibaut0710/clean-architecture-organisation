@@ -23,26 +23,26 @@ namespace RoomReservationAPI.Services
                     foreach (var reservation in reserveInfo)
                     {
                         if (reservation.HotelId == item.HotelId && reservation.RoomId == item.RoomId)
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
                             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
                     }
                     _reservationContext.ReservationInformation.Add(item);
                     _reservationContext.SaveChanges();
                     return item;
                 }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
                 return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine(item);
             }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
 
         public ReservationDTO Cancel(ReservationDTO item)
@@ -61,18 +61,18 @@ namespace RoomReservationAPI.Services
                     _reservationContext.SaveChanges();
                     return reservationDTO;
                 }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
                 return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine(item);
             }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
     }
 }

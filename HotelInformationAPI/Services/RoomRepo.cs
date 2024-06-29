@@ -26,27 +26,27 @@ namespace HotelInformationAPI.Services
                         foreach (var roomItem in rooms)
                         {
                             if (roomItem.HotelId == room.HotelId && roomItem.Id == room.Id)
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
                                 return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
                         }
                         _hotelContext.InformationsChambre.Add(room);
                         _hotelContext.SaveChanges();
                         return room;
                     }
                 }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
                 return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine(room);
             }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
 
         public RoomDTO Delete(RoomDTO roomDTO)
@@ -68,18 +68,18 @@ namespace HotelInformationAPI.Services
                         return room;
                     }
                 }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
                 return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine(roomDTO);
             }
-#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
+
             return null;
-#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
+
         }
     }
 }
