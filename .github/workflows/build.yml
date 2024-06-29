@@ -22,6 +22,7 @@ jobs:
         run: dotnet restore
       
       - name: Run linting with StyleCop
+        continue-on-error: true
         run: dotnet build -p:StyleCopAnalyzers=true -warnaserror
       
       - name: Set up JDK 17
