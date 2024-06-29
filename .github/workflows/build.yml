@@ -47,31 +47,8 @@ jobs:
         shell: powershell
         env:
           GIT_AUTHOR: ${{ env.GIT_AUTHOR }}
+          GIT_AUTHOR_EMAIL: ${{ env.GIT_AUTHOR_EMAIL }}
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"testThibaut0710_clean-architecture-organisation_27b685f1-a34a-4e6a-aabc-b49778a4cfd5" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.analysis.committer="${{ env.GIT_AUTHOR }}"
           dotnet build
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-      - name: Send email to commit author      
-        if: success()
-        uses: dawidd6/action-send-mail@v2
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          subject: 'SonarQube Analysis Report'
-          body: |
-            Dear Commit Author,
-
-            The SonarQube analysis for your commit has completed.
-
-            Summary:
-            - Project: Your Project Name
-            - Analysis Date: $(date +%Y-%m-%d)
-            - Issues Found: [Number of issues]
-            - Quality Gate Status: [Pass/Fail]
-
-            For more details, visit [SonarQube URL].
-
-          to: ${{ env.GIT_AUTHOR_EMAIL }}
-          from: noreply@ssonarqube.com
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.analysis.committerEmail="${{ env.GIT_AUTHOR_EMAIL }}"
