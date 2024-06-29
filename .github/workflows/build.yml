@@ -42,8 +42,6 @@ jobs:
         run: |
           echo "GIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_ENV
           echo "GIT_AUTHOR_EMAIL=$(git log -1 --pretty=format:'%ae')" >> $GITHUB_ENV
-          echo "GIT_AUTHOR_EMAIL=$(git log -1 --pretty=format:'%ae')" >> $GITHUB_ENV
-
 
       - name: Build and analyze
         shell: powershell
@@ -51,12 +49,6 @@ jobs:
           GIT_AUTHOR: ${{ env.GIT_AUTHOR }}
           GIT_AUTHOR_EMAIL: ${{ env.GIT_AUTHOR_EMAIL }}
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"testThibaut0710_clean-architecture-organisation_27b685f1-a34a-4e6a-aabc-b49778a4cfd5" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.analysis.committer="${{ env.GIT_AUTHOR }}" /d:sonar.analysis.committerEmail="${{ env.GIT_AUTHOR_EMAIL }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"testThibaut0710_clean-architecture-organisation_27b685f1-a34a-4e6a-aabc-b49778a4cfd5" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.analysis.committer="${{ env.GIT_AUTHOR }}" /d:sonar.analysis.committerEmail="${{github.event.pusher.email}}"
           dotnet build
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
-      - name: Get commit details
-        id: commit-details
-        run: |
-          COMMIT_EMAIL=$(git log -1 --pretty=format:'%ae')
-          echo "Committer email is $COMMIT_EMAIL"
