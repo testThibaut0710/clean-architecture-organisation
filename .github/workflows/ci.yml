@@ -102,3 +102,5 @@ jobs:
         asset_path: ./UserRegistrationAPI.zip
         asset_name: UserRegistrationAPI.zip
         asset_content_type: application/zip
+
+#coucou
