@@ -38,7 +38,7 @@ namespace HotelInformationAPI
               });
             builder.Services.AddScoped<IRepo<Hotel, int>, HotelRepo>();
             builder.Services.AddScoped<IService<Hotel, int>, HotelService>();
-            builder.Services.AddScoped<IRoomRepo<Room,RoomDTO>, RoomRepo>();
+            builder.Services.AddScoped<IRoomRepo<Room, RoomDTO>, RoomRepo>();
             builder.Services.AddScoped<IRoomService<Room, RoomDTO>, RoomService>();
             builder.Services.AddScoped<IHotelSummaryService<Hotel, string, double, int>, HotelSummaryService>();
 

@@ -1,5 +1,4 @@
-﻿using HotelInformationAPI.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,12 +11,12 @@ namespace RoomReservationAPI.Models
 
         [Required]
         public string UserName { get; set; }
-        
+
         [Required]
         public int HotelId { get; set; }
 
         [Required]
-        public int RoomId { get;set; }
+        public int RoomId { get; set; }
 
         [Required]
         [Column(TypeName = "date")]

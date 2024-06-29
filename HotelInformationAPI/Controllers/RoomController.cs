@@ -2,7 +2,6 @@
 using HotelInformationAPI.Models;
 using HotelInformationAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 namespace HotelInformationAPI.Controllers
 {
@@ -12,9 +11,9 @@ namespace HotelInformationAPI.Controllers
     public class RoomController : ControllerBase
     {
         private readonly IRoomService<Room, RoomDTO> _roomService;
-        public RoomController(IRoomService<Room,RoomDTO> roomService)
+        public RoomController(IRoomService<Room, RoomDTO> roomService)
         {
-             _roomService = roomService;
+            _roomService = roomService;
         }
         [HttpPost("AddRoomInfos")]
         [ProducesResponseType(typeof(Room), StatusCodes.Status200OK)]

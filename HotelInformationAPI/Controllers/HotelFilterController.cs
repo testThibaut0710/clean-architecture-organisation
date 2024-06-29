@@ -10,7 +10,7 @@ namespace HotelInformationAPI.Controllers
     public class HotelFilterController : ControllerBase
     {
         private readonly IHotelSummaryService<Hotel, string, double, int> _service;
-        public HotelFilterController(IHotelSummaryService<Hotel,string,double,int> service)
+        public HotelFilterController(IHotelSummaryService<Hotel, string, double, int> service)
         {
             _service = service;
         }

@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UserRegistrationAPI.Interfaces;
 using UserRegistrationAPI.Models.DTO;
-using UserRegistrationAPI.Services;
 
 namespace UserRegistrationAPI.Controllers
 {
@@ -13,7 +10,7 @@ namespace UserRegistrationAPI.Controllers
     {
         private readonly IService<UserRegisterDTO, UserDTO> _userService;
 
-        public UserRegistrationController(IService<UserRegisterDTO,UserDTO> userService)
+        public UserRegistrationController(IService<UserRegisterDTO, UserDTO> userService)
         {
             _userService = userService;
         }

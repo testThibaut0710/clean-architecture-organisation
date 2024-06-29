@@ -8,17 +8,17 @@ namespace RoomReservationAPI.Services
     {
         private readonly IReserveRepo<Reservation, ReservationDTO> _repo;
 
-        public ReserveService(IReserveRepo<Reservation,ReservationDTO> repo)
+        public ReserveService(IReserveRepo<Reservation, ReservationDTO> repo)
         {
             _repo = repo;
         }
         public Reservation Book(Reservation item)
         {
             var book = _repo.Book(item);
-            if(book != null)
+            if (book != null)
                 return book;
             return null;
-            
+
         }
 
         public ReservationDTO Cancel(ReservationDTO item)

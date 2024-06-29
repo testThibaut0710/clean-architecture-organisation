@@ -2,7 +2,7 @@
 
 namespace RoomReservationAPI.Models
 {
-    public class ReservationContext:DbContext
+    public class ReservationContext : DbContext
     {
         public ReservationContext(DbContextOptions options) : base(options)
         {

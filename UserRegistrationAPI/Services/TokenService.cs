@@ -19,7 +19,7 @@ namespace UserRegistrationAPI.Services
         {
             string token = string.Empty;
             //User identity
-            var claims = new []
+            var claims = new[]
             {
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.Role,user.Role)

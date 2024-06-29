@@ -1,14 +1,13 @@
 ﻿using HotelInformationAPI.Interface;
 using HotelInformationAPI.Models;
-using System;
 
 namespace HotelInformationAPI.Services
 {
-    public class HotelSummaryService : IHotelSummaryService <Hotel, string, double, int>
+    public class HotelSummaryService : IHotelSummaryService<Hotel, string, double, int>
     {
         private readonly IRepo<Hotel, int> _depotHotel;
 
-        public HotelSummaryService(IRepo<Hotel,int> depotHotel) 
+        public HotelSummaryService(IRepo<Hotel, int> depotHotel)
         {
             _depotHotel = depotHotel;
         }
@@ -25,11 +24,11 @@ namespace HotelInformationAPI.Services
         {
             List<Hotel> hotels = new List<Hotel>();
             var hotel = _depotHotel.GetAll();
-            if(hotel != null)
+            if (hotel != null)
             {
-                foreach(var item in hotel)
+                foreach (var item in hotel)
                 {
-                    if(item.City.ToLower() == localisation.ToLower())
+                    if (item.City.ToLower() == localisation.ToLower())
                     {
                         hotels.Add(item);
                     }
@@ -69,7 +68,8 @@ namespace HotelInformationAPI.Services
                         return item.NumberOfRooms;
                     }
                 }
-            }return 0;
+            }
+            return 0;
         }
     }
 }
