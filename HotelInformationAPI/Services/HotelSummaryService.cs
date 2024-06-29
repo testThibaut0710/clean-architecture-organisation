@@ -17,30 +17,36 @@ namespace HotelInformationAPI.Services
             var hotels = _depotHotel.GetAll();
             if (hotels != null)
                 return hotels;
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return null;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
 
         public ICollection<Hotel> GetByLocation(string localisation)
         {
-            List<Hotel> hotels = new List<Hotel>();
+            List<Hotel> hotels = new();
             var hotel = _depotHotel.GetAll();
             if (hotel != null)
             {
                 foreach (var item in hotel)
                 {
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                     if (item.City.ToLower() == localisation.ToLower())
                     {
                         hotels.Add(item);
                     }
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 }
                 return hotels;
             }
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return null;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
 
         public ICollection<Hotel> GetByPriceRange(double gammePrix)
         {
-            List<Hotel> hotels = new List<Hotel>();
+            List<Hotel> hotels = new();
             var hotel = _depotHotel.GetAll();
             if (hotel != null)
             {
@@ -53,7 +59,9 @@ namespace HotelInformationAPI.Services
                 }
                 return hotels;
             }
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return null;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
 
         public int GetCount(string nomHotel)
@@ -63,10 +71,12 @@ namespace HotelInformationAPI.Services
             {
                 foreach (var item in hotels)
                 {
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                     if (item.Name.ToLower() == nomHotel.ToLower())
                     {
                         return item.NumberOfRooms;
                     }
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 }
             }
             return 0;

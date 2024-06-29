@@ -26,7 +26,9 @@ namespace HotelInformationAPI.Services
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine(hotel);
             }
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return null;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
 
         public Hotel Delete(int identifiant)
@@ -39,16 +41,18 @@ namespace HotelInformationAPI.Services
                     var deleteRooms = _hotelContext.InformationsChambre.Where(r => r.HotelId == identifiant);
                     _hotelContext.InformationsChambre.RemoveRange(deleteRooms);
                     _hotelContext.SaveChanges();
-                    Hotel info = new Hotel();
-                    info.Id = hotelInfo.Id;
-                    info.Name = hotelInfo.Name;
-                    info.Description = hotelInfo.Description;
-                    info.Address = hotelInfo.Address;
-                    info.ContactNumber = hotelInfo.ContactNumber;
-                    info.City = hotelInfo.City;
-                    info.Country = hotelInfo.Country;
-                    info.AverageRating = hotelInfo.AverageRating;
-                    info.NumberOfRooms = hotelInfo.NumberOfRooms;
+                    Hotel info = new()
+                    {
+                        Id = hotelInfo.Id,
+                        Name = hotelInfo.Name,
+                        Description = hotelInfo.Description,
+                        Address = hotelInfo.Address,
+                        ContactNumber = hotelInfo.ContactNumber,
+                        City = hotelInfo.City,
+                        Country = hotelInfo.Country,
+                        AverageRating = hotelInfo.AverageRating,
+                        NumberOfRooms = hotelInfo.NumberOfRooms
+                    };
                     _hotelContext.Remove(hotelInfo);
                     _hotelContext.SaveChanges();
                     return info;
@@ -58,7 +62,9 @@ namespace HotelInformationAPI.Services
             {
                 Debug.WriteLine(ex.Message);
             }
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return null;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
 
         public ICollection<Hotel> GetAll()
@@ -75,7 +81,9 @@ namespace HotelInformationAPI.Services
             {
                 Debug.WriteLine(ex.Message);
             }
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return null;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
 
         public Hotel Update(Hotel hotel)
@@ -103,7 +111,9 @@ namespace HotelInformationAPI.Services
                 Debug.WriteLine(ex.Message);
                 Debug.WriteLine(hotel);
             }
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return null;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
     }
 }

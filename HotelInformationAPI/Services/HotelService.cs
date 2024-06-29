@@ -16,14 +16,18 @@ namespace HotelInformationAPI.Services
             var addInfo = _repo.Add(hotel);
             if (addInfo != null)
                 return addInfo;
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return null;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
         public Hotel Delete(int identifiant)
         {
             var delInfo = _repo.Delete(identifiant);
             if (delInfo != null)
                 return delInfo;
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return null;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
 
         public Hotel Update(Hotel hotel)
@@ -31,7 +35,9 @@ namespace HotelInformationAPI.Services
             var updateInfo = _repo.Update(hotel);
             if (updateInfo != null)
                 return updateInfo;
+#pragma warning disable CS8603 // Existence possible d'un retour de référence null.
             return null;
+#pragma warning restore CS8603 // Existence possible d'un retour de référence null.
         }
     }
 }

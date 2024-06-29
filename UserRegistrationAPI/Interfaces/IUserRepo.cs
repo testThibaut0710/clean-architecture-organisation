@@ -2,7 +2,7 @@
 {
     public interface IUserRepo<T, K>
     {
-        T Add(T item);
-        T Get(K key);
+        T? Add(T item);
+        T? Get(K key);
     }
 }

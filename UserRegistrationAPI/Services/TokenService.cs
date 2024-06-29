@@ -17,13 +17,14 @@ namespace UserRegistrationAPI.Services
         }
         public string GenerateToken(UserDTO user)
         {
-            string token = string.Empty;
             //User identity
+#pragma warning disable CS8604 // Existence possible d'un argument de référence null.
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.Role,user.Role)
             };
+#pragma warning restore CS8604 // Existence possible d'un argument de référence null.
             //Signature algorithm
             var cred = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
             //Assembling the token details
@@ -36,7 +37,7 @@ namespace UserRegistrationAPI.Services
             //Using the handler to generate the token
             var tokenHandler = new JwtSecurityTokenHandler();
             var myToken = tokenHandler.CreateToken(tokenDescription);
-            token = tokenHandler.WriteToken(myToken);
+            string token = tokenHandler.WriteToken(myToken);
             return token;
         }
     }
