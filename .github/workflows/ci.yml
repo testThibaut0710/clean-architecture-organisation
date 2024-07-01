@@ -17,8 +17,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        path: master
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
@@ -35,22 +33,22 @@ jobs:
         sudo mv chromedriver /usr/local/bin/
 
     - name: Install Dependencies
-      run: dotnet restore master/HotelBookingSystemSolution.sln
+      run: dotnet restore HotelBookingSystemSolution.sln
 
     - name: Build
-      run: dotnet build master/HotelBookingSystemSolution.sln --no-restore
+      run: dotnet build HotelBookingSystemSolution.sln --no-restore
       
     - name: Run Tests noN Graphic
-      run: dotnet test master/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest --logger "trx;LogFileName=non_graphic_tests.trx"
+      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest --logger "trx;LogFileName=non_graphic_tests.trx"
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
 
     - name: Report Tests
       uses: dorny/test-reporter@v1
-      if: success() || failure()
+      if: always()  # Ensure that this step runs even if previous steps fail
       with:
-        name: Run Tests noN Graphic
+        name: Non-Graphic Tests
         path: '**/non_graphic_tests.trx'
         reporter: dotnet-trx
 
