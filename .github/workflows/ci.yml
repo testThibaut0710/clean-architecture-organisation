@@ -33,10 +33,10 @@ jobs:
         sudo mv chromedriver /usr/local/bin/
 
     - name: Install Dependencies
-      run: dotnet restore release/Test/HotelBookingSystemSolution.sln
+      run: dotnet restore master/HotelBookingSystemSolution.sln
 
     - name: Build
-      run: dotnet build release/Test/HotelBookingSystemSolution.sln --no-restore
+      run: dotnet build master/HotelBookingSystemSolution.sln --no-restore
 
     - name: Run Tests noN Graphic
       run: dotnet test master/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest
@@ -53,6 +53,7 @@ jobs:
 
     - name: Generate coverage report
       run: dotnet tool install --global dotnet-reportgenerator-globaltool && reportgenerator -reports:./TestResults/**/*.xml -targetdir:./TestResults/coveragereport -reporttypes:HtmlInline_AzurePipelines;Cobertura
+      continue-on-error: true
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
