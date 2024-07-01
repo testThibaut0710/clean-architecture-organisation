@@ -1,6 +1,8 @@
 name: CI/CD
 
 on:
+  schedule:
+    - cron: "1 0 1,15 * *"
   push:
     branches: 
       - master
