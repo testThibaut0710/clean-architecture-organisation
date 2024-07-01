@@ -50,7 +50,7 @@ jobs:
       uses: dorny/test-reporter@v1
       if: success() || failure()
       with:
-        name: Non-Graphic Tests
+        name: Run Tests noN Graphic
         path: '**/non_graphic_tests.trx'
         reporter: dotnet-trx
 
