@@ -54,10 +54,12 @@ jobs:
       
       - name: Retrieve commit author and commit email
         id: get_author
-        shell: bash
+        shell: powershell
         run: |
-          echo "GIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_ENV
-          echo "GIT_AUTHOR_EMAIL=$(git log -1 --pretty=format:'%ae')" >> $GITHUB_ENV
+          $author = git log -1 --pretty=format:'%an'
+          $author_email = git log -1 --pretty=format:'%ae'
+          echo "GIT_AUTHOR=$author" >> $env:GITHUB_ENV
+          echo "GIT_AUTHOR_EMAIL=$author_email" >> $env:GITHUB_ENV
 
       - name: Build and analyze
         shell: powershell
