@@ -1,4 +1,3 @@
-
 name: CI/CD
 
 on:
@@ -10,11 +9,11 @@ on:
   pull_request:
     branches: 
       - master
+  permissions:
+    contents: read
+    actions: read
+    checks: write
 
-permissions:
-  contents: read
-  actions: read
-  checks: write
 
 jobs:
         
@@ -22,7 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v2
+      with:
+        path: master
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
@@ -38,23 +39,23 @@ jobs:
         unzip chromedriver_linux64.zip
         sudo mv chromedriver /usr/local/bin/
     - name: Install Dependencies
-      run: dotnet restore HotelBookingSystemSolution.sln
+      run: dotnet restore master/HotelBookingSystemSolution.sln
 
     - name: Build
-      run: dotnet build HotelBookingSystemSolution.sln --no-restore
+      run: dotnet build master/HotelBookingSystemSolution.sln --no-restore
       
     - name: Run Tests noN Graphic
-      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest --logger "trx;LogFileName=non_graphic_tests.trx"
+      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest --logger "trx;LogFileName=master/non_graphic_tests.trx"
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
-
+    
     - name: Report Tests
       uses: dorny/test-reporter@v1
       if: always()  # Ensure that this step runs even if previous steps fail
       with:
         name: Non-Graphic Tests
-        path: '**/non_graphic_tests.trx'
+        path: 'master/**/non_graphic_tests.trx'
         reporter: dotnet-trx
 
     - name: Run Tests Selenium
@@ -68,7 +69,7 @@ jobs:
       run: |
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
           echo "Publishing $api..."
-          dotnet publish $api/$api.csproj -c Release -o master/$api/publish/$api
+          dotnet publish master/$api/$api.csproj -c Release -o master/$api/publish/$api
           echo "Published $api to master/$api/publish/$api"
         done
     
@@ -91,6 +92,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: release_artifact
+        path: master
 
     - name: Create GitHub Release
       id: create_release
