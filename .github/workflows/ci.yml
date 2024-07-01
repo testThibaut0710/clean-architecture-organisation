@@ -38,6 +38,24 @@ jobs:
     - name: Build
       run: dotnet build master/HotelBookingSystemSolution.sln --no-restore
 
+    - name: Run tests and generate coverage report
+      run: |
+        dotnet test master/HotelBookingSystemSolution.sln --no-build --collect:"XPlat Code Coverage" --results-directory ./test-results
+        dotnet tool install --global dotnet-reportgenerator-globaltool
+        reportgenerator -reports:./test-results/**/coverage.cobertura.xml -targetdir:./coverage-report -reporttypes:Html
+
+    - name: Upload coverage report artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: ./coverage-report
+
+    - name: Post coverage report as a comment
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        header: Coverage Report
+        path: ./coverage-report/index.html
+
     - name: Run Tests noN Graphic
       run: dotnet test master/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest
       env:
@@ -50,32 +68,6 @@ jobs:
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
-
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-results
-        path: ./TestResults/
-        
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report
-        path: ./TestResults/coveragereport/
-        
-    - name: Comment on PR with coverage results
-      if: ${{ github.event_name == 'pull_request' }}
-      uses: marocchino/sticky-pull-request-comment@v2
-      with:
-        header: Coverage Report
-        message: |
-          ![Coverage](https://raw.githubusercontent.com/${{ github.repository }}/coverage-report/index.html)
-          **Summary**:
-          ```diff
-          - Total: ${{ steps.coverage.outputs.total }}
-          - Covered: ${{ steps.coverage.outputs.covered }}
-          - Coverage: ${{ steps.coverage.outputs.coverage }}%
-          ```
         
     - name: Publish API
       run: |
