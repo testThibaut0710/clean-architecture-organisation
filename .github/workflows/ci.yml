@@ -69,7 +69,7 @@ jobs:
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
           echo "Publishing $api..."
           dotnet publish $api/$api.csproj -c Release -o $api/publish/$api
-          echo "Published $api to $api/publish/$api"
+          echo "Published $api to master/$api/publish/$api"
         done
     
     - name: Upload Build Artifact
@@ -106,9 +106,9 @@ jobs:
 
     - name: Compress Published APIs
       run: |
-        zip -r HotelInformationAPI.zip HotelInformationAPI/publish/HotelInformationAPI
-        zip -r RoomReservationAPI.zip RoomReservationAPI/publish/RoomReservationAPI
-        zip -r UserRegistrationAPI.zip UserRegistrationAPI/publish/UserRegistrationAPI
+        zip -r HotelInformationAPI.zip master/HotelInformationAPI/publish/HotelInformationAPI
+        zip -r RoomReservationAPI.zip master/RoomReservationAPI/publish/RoomReservationAPI
+        zip -r UserRegistrationAPI.zip master/UserRegistrationAPI/publish/UserRegistrationAPI
     
     - name: Upload Release Assets - HotelInformationAPI
       uses: actions/upload-release-asset@v1
