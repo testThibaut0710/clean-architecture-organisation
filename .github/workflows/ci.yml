@@ -51,10 +51,6 @@ jobs:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
 
-    - name: Generate coverage report
-      run: dotnet tool install --global dotnet-reportgenerator-globaltool && reportgenerator -reports:./TestResults/**/*.xml -targetdir:./TestResults/coveragereport -reporttypes:HtmlInline_AzurePipelines;Cobertura
-      continue-on-error: true
-
     - name: Upload test results
       uses: actions/upload-artifact@v4
       with:
@@ -66,6 +62,20 @@ jobs:
       with:
         name: coverage-report
         path: ./TestResults/coveragereport/
+        
+    - name: Comment on PR with coverage results
+      if: ${{ github.event_name == 'pull_request' }}
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        header: Coverage Report
+        message: |
+          ![Coverage](https://raw.githubusercontent.com/${{ github.repository }}/coverage-report/index.html)
+          **Summary**:
+          ```diff
+          - Total: ${{ steps.coverage.outputs.total }}
+          - Covered: ${{ steps.coverage.outputs.covered }}
+          - Coverage: ${{ steps.coverage.outputs.coverage }}%
+          ```
         
     - name: Publish API
       run: |
