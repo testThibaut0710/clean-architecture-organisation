@@ -4,11 +4,9 @@ on:
   push:
     branches: 
       - master
-      - release/Test
   pull_request:
     branches: 
       - master
-      - release/Test
 
 jobs:
         
@@ -18,7 +16,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        path: release/Test
+        path: master
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
@@ -35,37 +33,53 @@ jobs:
         sudo mv chromedriver /usr/local/bin/
 
     - name: Install Dependencies
-      run: dotnet restore release/Test/HotelBookingSystemSolution.sln
+      run: dotnet restore master/HotelBookingSystemSolution.sln
 
     - name: Build
-      run: dotnet build release/Test/HotelBookingSystemSolution.sln --no-restore
+      run: dotnet build master/HotelBookingSystemSolution.sln --no-restore
 
     - name: Run Tests noN Graphic
-      run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest
+      run: dotnet test master/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
 
     - name: Run Tests Selenium
-      run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
+      run: dotnet test master/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
       continue-on-error: true
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
+
+    - name: Generate coverage report
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool && reportgenerator -reports:./TestResults/**/*.xml -targetdir:./TestResults/coveragereport -reporttypes:HtmlInline_AzurePipelines;Cobertura
+      continue-on-error: true
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: ./TestResults/
+        
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: ./TestResults/coveragereport/
         
     - name: Publish API
       run: |
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
           echo "Publishing $api..."
-          dotnet publish release/Test/$api/$api.csproj -c Release -o release/Test/$api/publish/$api
-          echo "Published $api to release/Test/$api/publish/$api"
+          dotnet publish master/$api/$api.csproj -c Release -o master/$api/publish/$api
+          echo "Published $api to master/$api/publish/$api"
         done
     
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
         name: release_artifact
-        path: release/Test/
+        path: master
         retention-seconds: 600
 
   release:
@@ -80,7 +94,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: release_artifact
-        path: release/Test/
+        path: master
 
     - name: Create GitHub Release
       id: create_release
@@ -96,9 +110,9 @@ jobs:
 
     - name: Compress Published APIs
       run: |
-        zip -r HotelInformationAPI.zip release/Test/HotelInformationAPI/publish/HotelInformationAPI
-        zip -r RoomReservationAPI.zip release/Test/RoomReservationAPI/publish/RoomReservationAPI
-        zip -r UserRegistrationAPI.zip release/Test/UserRegistrationAPI/publish/UserRegistrationAPI
+        zip -r HotelInformationAPI.zip master/HotelInformationAPI/publish/HotelInformationAPI
+        zip -r RoomReservationAPI.zip master/RoomReservationAPI/publish/RoomReservationAPI
+        zip -r UserRegistrationAPI.zip master/UserRegistrationAPI/publish/UserRegistrationAPI
 
     
     - name: Upload Release Assets - HotelInformationAPI
