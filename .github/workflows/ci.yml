@@ -37,25 +37,7 @@ jobs:
 
     - name: Build
       run: dotnet build master/HotelBookingSystemSolution.sln --no-restore
-
-    - name: Run tests and generate coverage report
-      run: |
-        dotnet test master/HotelBookingSystemSolution.sln --no-build --collect:"XPlat Code Coverage" --results-directory ./test-results
-        dotnet tool install --global dotnet-reportgenerator-globaltool
-        reportgenerator -reports:./test-results/**/coverage.cobertura.xml -targetdir:./coverage-report -reporttypes:Html
-
-    - name: Upload coverage report artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-report
-        path: ./coverage-report
-
-    - name: Post coverage report as a comment
-      uses: marocchino/sticky-pull-request-comment@v2
-      with:
-        header: Coverage Report
-        path: ./coverage-report/index.html
-
+      
     - name: Run Tests noN Graphic
       run: dotnet test master/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest
       env:
