@@ -76,6 +76,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: release_artifact
+        path: master
         retention-seconds: 600
 
   release:
