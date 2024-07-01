@@ -66,15 +66,15 @@ jobs:
       run: |
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
           echo "Publishing $api..."
-          dotnet publish $api/$api.csproj -c Release -o $api/publish/$api
-          echo "Published $api to $api/publish/$api"
+          dotnet publish $api/$api.csproj -c Release -o master/$api/publish/$api
+          echo "Published $api to master/$api/publish/$api"
         done
     
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
         name: release_artifact
-        path: ./release
+        path: master
         retention-seconds: 600
 
   release:
@@ -89,7 +89,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: release_artifact
-        path: ./release
+        path: master
 
     - name: Create GitHub Release
       id: create_release
