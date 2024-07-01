@@ -8,6 +8,11 @@ on:
     branches: 
       - master
 
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
 jobs:
 
   test:
