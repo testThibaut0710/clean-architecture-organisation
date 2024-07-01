@@ -9,11 +9,11 @@ on:
   pull_request:
     branches: 
       - master
-
 permissions:
   contents: read
   actions: read
   checks: write
+
 
 jobs:
         
@@ -21,7 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v2
+      with:
+        path: master
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
@@ -36,19 +38,18 @@ jobs:
         wget https://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip
         unzip chromedriver_linux64.zip
         sudo mv chromedriver /usr/local/bin/
-
     - name: Install Dependencies
-      run: dotnet restore HotelBookingSystemSolution.sln
+      run: dotnet restore master/HotelBookingSystemSolution.sln
 
     - name: Build
-      run: dotnet build HotelBookingSystemSolution.sln --no-restore
+      run: dotnet build master/HotelBookingSystemSolution.sln --no-restore
       
     - name: Run Tests noN Graphic
       run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest --logger "trx;LogFileName=non_graphic_tests.trx"
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
-
+    
     - name: Report Tests
       uses: dorny/test-reporter@v1
       if: always()  # Ensure that this step runs even if previous steps fail
@@ -110,7 +111,6 @@ jobs:
         zip -r HotelInformationAPI.zip master/HotelInformationAPI/publish/HotelInformationAPI
         zip -r RoomReservationAPI.zip master/RoomReservationAPI/publish/RoomReservationAPI
         zip -r UserRegistrationAPI.zip master/UserRegistrationAPI/publish/UserRegistrationAPI
-
     
     - name: Upload Release Assets - HotelInformationAPI
       uses: actions/upload-release-asset@v1
