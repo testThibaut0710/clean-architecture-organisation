@@ -10,13 +10,13 @@ namespace HotelInformationAPI.Controllers
     public class HotelController : ControllerBase
     {
         private readonly IService<Hotel, int> _service;
-        public HotelController(IService<Hotel, int> service)
-        {
+        public HotelController(IService<Hotel,int> service)
+        { 
             _service = service;
         }
         [HttpPost("AddHotel")]
-        [ProducesResponseType(typeof(Hotel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Hotel),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] 
         public ActionResult<Hotel> Add(Hotel hotel)
         {
             var hotelAddResult = _service.Add(hotel);
@@ -41,7 +41,7 @@ namespace HotelInformationAPI.Controllers
         {
             var hotelDeleteResult = _service.Delete(HotelID);
             if (hotelDeleteResult != null)
-                return Ok("Hotel Information Successfully Deleted!");
+               return Ok("Hotel Information Successfully Deleted!");
             return BadRequest("Information Could Not Be Deleted");
         }
     }

@@ -13,18 +13,17 @@ namespace UserRegistrationAPI.Services
 
         public TokenService(IConfiguration configuration)
         {
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"]));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("f1e2d3c4b5a697867564738291a3b2c1"));
         }
         public string GenerateToken(UserDTO user)
         {
+            string token = string.Empty;
             //User identity
-
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.Role,user.Role)
             };
-
             //Signature algorithm
             var cred = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
             //Assembling the token details
@@ -37,7 +36,7 @@ namespace UserRegistrationAPI.Services
             //Using the handler to generate the token
             var tokenHandler = new JwtSecurityTokenHandler();
             var myToken = tokenHandler.CreateToken(tokenDescription);
-            string token = tokenHandler.WriteToken(myToken);
+            token = tokenHandler.WriteToken(myToken);
             return token;
         }
     }

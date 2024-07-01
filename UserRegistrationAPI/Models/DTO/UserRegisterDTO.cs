@@ -6,8 +6,6 @@ namespace UserRegistrationAPI.Models.DTO
     {
         [Required]
         [MinLength(8)]
-
         public string PasswordClear { get; set; }
-
     }
 }

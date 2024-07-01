@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotelInformationAPI.Models
 {
@@ -14,9 +14,7 @@ namespace HotelInformationAPI.Models
         public Hotel? Hotel { get; set; }
 
         [Required]
-
         public string RoomType { get; set; }
-
 
         [Required]
         public double Price { get; set; }

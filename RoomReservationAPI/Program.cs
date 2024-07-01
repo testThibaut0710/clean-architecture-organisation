@@ -16,14 +16,14 @@ namespace RoomReservationAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Configuration.AddEnvironmentVariables();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<ReservationContext>(opts =>
             {
-                opts.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
+                opts.UseMySQL(builder.Configuration["DB_STRING_SECRET"]);
             });
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>
@@ -31,7 +31,7 @@ namespace RoomReservationAPI
                   options.TokenValidationParameters = new TokenValidationParameters
                   {
                       ValidateIssuerSigningKey = true,
-                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
+                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TOKEN_KEY_SECRET"])),
                       ValidateIssuer = false,
                       ValidateAudience = false
                   };

@@ -4,11 +4,11 @@ using HotelInformationAPI.Models.DTO;
 
 namespace HotelInformationAPI.Services
 {
-    public class RoomService : IRoomService<Room, RoomDTO>
+    public class RoomService:IRoomService<Room,RoomDTO>
     {
         private readonly IRoomRepo<Room, RoomDTO> _roomRepo;
 
-        public RoomService(IRoomRepo<Room, RoomDTO> roomRepo)
+        public RoomService(IRoomRepo<Room,RoomDTO> roomRepo)
         {
             _roomRepo = roomRepo;
         }
@@ -16,11 +16,9 @@ namespace HotelInformationAPI.Services
         public Room Add(Room item)
         {
             var add = _roomRepo.Add(item);
-            if (add != null)
+            if(add != null)
                 return item;
-
             return null;
-
         }
 
         public RoomDTO Delete(RoomDTO item)
@@ -28,9 +26,7 @@ namespace HotelInformationAPI.Services
             var delete = _roomRepo.Delete(item);
             if (delete != null)
                 return item;
-
             return null;
-
         }
     }
 }

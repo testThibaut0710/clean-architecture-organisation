@@ -16,14 +16,14 @@ namespace HotelInformationAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Configuration.AddEnvironmentVariables();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<HotelContext>(opts =>
             {
-                opts.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
+                opts.UseMySQL(builder.Configuration["DB_STRING_SECRET"]);
             });
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>
@@ -31,14 +31,14 @@ namespace HotelInformationAPI
                   options.TokenValidationParameters = new TokenValidationParameters
                   {
                       ValidateIssuerSigningKey = true,
-                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
+                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TOKEN_KEY_SECRET"])),
                       ValidateIssuer = false,
                       ValidateAudience = false
                   };
               });
             builder.Services.AddScoped<IRepo<Hotel, int>, HotelRepo>();
             builder.Services.AddScoped<IService<Hotel, int>, HotelService>();
-            builder.Services.AddScoped<IRoomRepo<Room, RoomDTO>, RoomRepo>();
+            builder.Services.AddScoped<IRoomRepo<Room,RoomDTO>, RoomRepo>();
             builder.Services.AddScoped<IRoomService<Room, RoomDTO>, RoomService>();
             builder.Services.AddScoped<IHotelSummaryService<Hotel, string, double, int>, HotelSummaryService>();
 

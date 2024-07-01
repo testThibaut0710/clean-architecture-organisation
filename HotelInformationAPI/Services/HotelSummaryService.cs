@@ -1,13 +1,14 @@
 ﻿using HotelInformationAPI.Interface;
 using HotelInformationAPI.Models;
+using System;
 
 namespace HotelInformationAPI.Services
 {
-    public class HotelSummaryService : IHotelSummaryService<Hotel, string, double, int>
+    public class HotelSummaryService : IHotelSummaryService <Hotel, string, double, int>
     {
         private readonly IRepo<Hotel, int> _depotHotel;
 
-        public HotelSummaryService(IRepo<Hotel, int> depotHotel)
+        public HotelSummaryService(IRepo<Hotel,int> depotHotel) 
         {
             _depotHotel = depotHotel;
         }
@@ -17,36 +18,30 @@ namespace HotelInformationAPI.Services
             var hotels = _depotHotel.GetAll();
             if (hotels != null)
                 return hotels;
-
             return null;
-
         }
 
         public ICollection<Hotel> GetByLocation(string localisation)
         {
-            List<Hotel> hotels = new();
+            List<Hotel> hotels = new List<Hotel>();
             var hotel = _depotHotel.GetAll();
-            if (hotel != null)
+            if(hotel != null)
             {
-                foreach (var item in hotel)
+                foreach(var item in hotel)
                 {
-#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
-                    if (item.City.ToLower() == localisation.ToLower())
+                    if(item.City.ToLower() == localisation.ToLower())
                     {
                         hotels.Add(item);
                     }
-#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 }
                 return hotels;
             }
-
             return null;
-
         }
 
         public ICollection<Hotel> GetByPriceRange(double gammePrix)
         {
-            List<Hotel> hotels = new();
+            List<Hotel> hotels = new List<Hotel>();
             var hotel = _depotHotel.GetAll();
             if (hotel != null)
             {
@@ -59,9 +54,7 @@ namespace HotelInformationAPI.Services
                 }
                 return hotels;
             }
-
             return null;
-
         }
 
         public int GetCount(string nomHotel)
@@ -71,15 +64,12 @@ namespace HotelInformationAPI.Services
             {
                 foreach (var item in hotels)
                 {
-#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
                     if (item.Name.ToLower() == nomHotel.ToLower())
                     {
                         return item.NumberOfRooms;
                     }
-#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
                 }
-            }
-            return 0;
+            }return 0;
         }
     }
 }

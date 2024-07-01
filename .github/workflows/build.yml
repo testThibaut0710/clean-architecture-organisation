@@ -1,42 +1,30 @@
+name: Build
+
 on:
   push:
     branches:
-      - master
+      - release/Test
+
 
 jobs:
   build:
-    name: Build, Lint, and Analyze
+    name: Build and analyze
     runs-on: windows-latest
     
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '6.x'
-
-      - name: Install dependencies
-        run: dotnet restore
-      
-      - name: Run linting with StyleCop
-        continue-on-error: true
-        run: dotnet build -p:StyleCopAnalyzers=true -warnaserror
-      
       - name: Set up JDK 17
         uses: actions/setup-java@v1
         with:
           java-version: 17
-      
       - name: Cache SonarQube packages
         uses: actions/cache@v1
         with:
           path: ~\.sonar\cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      
       - name: Cache SonarQube scanner
         id: cache-sonar-scanner
         uses: actions/cache@v1
@@ -44,27 +32,15 @@ jobs:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
-     
       - name: Install SonarQube scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      
-      - name: Retrieve commit author and commit email
-        id: get_author
-        shell: bash
-        run: |
-          echo "GIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_ENV
-          echo "GIT_AUTHOR_EMAIL=$(git log -1 --pretty=format:'%ae')" >> $GITHUB_ENV
-
       - name: Build and analyze
         shell: powershell
-        env:
-          GIT_AUTHOR: ${{ env.GIT_AUTHOR }}
-          GIT_AUTHOR_EMAIL: ${{ env.GIT_AUTHOR_EMAIL }}
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"testThibaut0710_clean-architecture-organisation_27b685f1-a34a-4e6a-aabc-b49778a4cfd5" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.analysis.committer="${{ env.GIT_AUTHOR }}" /d:sonar.analysis.committerEmail="${{env.GIT_AUTHOR_EMAIL}}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"testThibaut0710_clean-architecture-organisation_88176ffc-838f-4c5e-ab73-bfcaa915386b" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
           dotnet build
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

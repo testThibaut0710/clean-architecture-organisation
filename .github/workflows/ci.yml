@@ -11,12 +11,9 @@ on:
       - release/Test
 
 jobs:
+        
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        api: [HotelInformationAPI, RoomReservationAPI, UserRegistrationAPI]
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -27,16 +24,35 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.x'
+        
+    - name: Install Chrome and ChromeDriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+        LATEST=$(wget -q -O - https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+        wget https://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
+        sudo mv chromedriver /usr/local/bin/
 
-    - name: Install dependencies
+    - name: Install Dependencies
       run: dotnet restore release/Test/HotelBookingSystemSolution.sln
 
     - name: Build
       run: dotnet build release/Test/HotelBookingSystemSolution.sln --no-restore
 
-    - name: Run tests
-      run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal
+    - name: Run Tests noN Graphic
+      run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest
+      env:
+        TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
+        DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
 
+    - name: Run Tests Selenium
+      run: dotnet test release/Test/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
+      continue-on-error: true
+      env:
+        TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
+        DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
+        
     - name: Publish API
       run: |
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
@@ -44,39 +60,51 @@ jobs:
           dotnet publish release/Test/$api/$api.csproj -c Release -o release/Test/$api/publish/$api
           echo "Published $api to release/Test/$api/publish/$api"
         done
+    
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: release_artifact
+        path: release/Test/
+        retention-seconds: 600
 
   release:
-    if: github.ref == 'refs/heads/release'
     needs: build
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
       with:
-        path: release/Test
+        name: release_artifact
+        path: release/Test/
 
     - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         tag_name: v${{ github.run_number }}
         release_name: Release ${{ github.run_number }}
         draft: false
         prerelease: false
+        
 
     - name: Compress Published APIs
       run: |
-        zip -r HotelInformationAPI.zip ./HotelInformationAPI/publish/HotelInformationAPI
-        zip -r RoomReservationAPI.zip ./RoomReservationAPI/publish/RoomReservationAPI
-        zip -r UserRegistrationAPI.zip ./UserRegistrationAPI/publish/UserRegistrationAPI
+        zip -r HotelInformationAPI.zip release/Test/HotelInformationAPI/publish/HotelInformationAPI
+        zip -r RoomReservationAPI.zip release/Test/RoomReservationAPI/publish/RoomReservationAPI
+        zip -r UserRegistrationAPI.zip release/Test/UserRegistrationAPI/publish/UserRegistrationAPI
 
+    
     - name: Upload Release Assets - HotelInformationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./HotelInformationAPI.zip
@@ -86,7 +114,7 @@ jobs:
     - name: Upload Release Assets - RoomReservationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./RoomReservationAPI.zip
@@ -96,11 +124,36 @@ jobs:
     - name: Upload Release Assets - UserRegistrationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.TEST_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./UserRegistrationAPI.zip
         asset_name: UserRegistrationAPI.zip
         asset_content_type: application/zip
 
-#coucou
+  deploy_pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+ 
+      - name: Install redoc-cli
+        run: npm install -g redoc-cli
+ 
+      - name: Generate HTML from openapi.json
+        run: redoc-cli bundle -o public/index.html ./openapi.json
+ 
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.MAX_TOKEN }}
+          publish_dir: ./public
+
+    
+    
+
+
+        

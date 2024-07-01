@@ -6,7 +6,7 @@ namespace HotelInformationAPI.Models.DTO
     {
         [Required]
         public int HotelID { get; set; }
-
+        
         [Required]
         public int RoomID { get; set; }
     }

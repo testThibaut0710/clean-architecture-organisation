@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using HotelInformationAPI.Interface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoomReservationAPI.Interfaces;
 using RoomReservationAPI.Models;
@@ -11,7 +13,7 @@ namespace RoomReservationAPI.Controllers
     public class GestionReservation : ControllerBase
     {
         private readonly IReserveService<Reservation, ReservationDTO> _service;
-        public GestionReservation(IReserveService<Reservation, ReservationDTO> service)
+        public GestionReservation(IReserveService<Reservation,ReservationDTO> service)
         {
             _service = service;
         }

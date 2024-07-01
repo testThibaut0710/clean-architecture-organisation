@@ -1,6 +1,6 @@
 ﻿namespace HotelInformationAPI.Interface
 {
-    public interface IRepo<T, K>
+    public interface IRepo<T,K>
     {
         T Add(T item);
         T Update(T item);

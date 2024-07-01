@@ -12,7 +12,7 @@ namespace UserRegistrationAPI.Services
         {
             _userContext = userContext;
         }
-        public User? Add(User item)
+        public User Add(User item)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace UserRegistrationAPI.Services
             return null;
         }
 
-        public User? Get(string key)
+        public User Get(string key)
         {
             var user = _userContext.UserInformation.FirstOrDefault(u => u.UserName == key);
             return user;
