@@ -55,7 +55,7 @@ jobs:
       if: always()  # Ensure that this step runs even if previous steps fail
       with:
         name: Non-Graphic Tests
-        path: 'master/**/non_graphic_tests.trx'
+        path: 'master/non_graphic_tests.trx'
         reporter: dotnet-trx
 
     - name: Run Tests Selenium
