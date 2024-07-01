@@ -20,6 +20,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with: 
+        path: master
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v2
@@ -66,15 +68,15 @@ jobs:
       run: |
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
           echo "Publishing $api..."
-          dotnet publish master/$api/$api.csproj -c Release -o master/$api/publish/$api
-          echo "Published $api to master/$api/publish/$api"
+          dotnet publish $api/$api.csproj -c Release -o $api/publish/$api
+          echo "Published $api to $api/publish/$api"
         done
     
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
         name: release_artifact
-        path: master
+        path: .
         retention-seconds: 600
 
   release:
@@ -89,7 +91,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: release_artifact
-        path: master
+        path: .
 
     - name: Create GitHub Release
       id: create_release
