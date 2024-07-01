@@ -48,11 +48,11 @@ jobs:
 
     - name: Report Tests
       uses: dorny/test-reporter@v1
-      if: always()  # Ensure that this step runs even if previous steps fail
+      if: success() || failure()
       with:
         name: Non-Graphic Tests
         path: '**/non_graphic_tests.trx'
-        reporter: trx
+        reporter: dotnet-trx
 
     - name: Run Tests Selenium
       run: dotnet test master/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
