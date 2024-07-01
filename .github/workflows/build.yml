@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     name: Build, Lint, and Analyze
-    runs-on: windows-latest
+    runs-on: self-hosted
     
     steps:
       - uses: actions/checkout@v4
