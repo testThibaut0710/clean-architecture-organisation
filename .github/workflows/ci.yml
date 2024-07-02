@@ -122,8 +122,6 @@ jobs:
 
     - name: Commit new version
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git commit -am "CI: bump version to ${{ steps.bump_version.outputs.version }}"
         git tag -a "v${{ steps.bump_version.outputs.version }}" -m "CI: create new tag"
         git push https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git
