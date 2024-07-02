@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RoomReservationAPI.Models;
-using System;
 
 public class CustomWebApplicationFactoryRoomReservation<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
 {

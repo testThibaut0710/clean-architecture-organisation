@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
 using UserRegistrationAPI.Models;
 
 public class CustomWebApplicationFactoryUserRegistration<TStartup> : WebApplicationFactory<TStartup> where TStartup : class

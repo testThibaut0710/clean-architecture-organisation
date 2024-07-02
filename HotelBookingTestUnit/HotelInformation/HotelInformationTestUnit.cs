@@ -26,7 +26,7 @@ namespace TestUnitaire
             // Arrange
             var hotel = new Hotel
             {
-                Id=2,
+                Id = 2,
                 Name = "Hôtel Test",
                 Description = "Description de l'hôtel Test. Cet hôtel est destiné aux tests unitaires.",
                 Address = "123 Rue Test",

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using RoomReservationAPI.Interfaces;
+﻿using RoomReservationAPI.Interfaces;
 using RoomReservationAPI.Models;
 using RoomReservationAPI.Models.DTO;
 using System.Diagnostics;
@@ -20,9 +18,9 @@ namespace RoomReservationAPI.Services
             try
             {
                 var reserveInfo = _reservationContext.ReservationInformation.ToList();
-                if(reserveInfo != null) 
-                { 
-                    foreach(var reservation in reserveInfo)
+                if (reserveInfo != null)
+                {
+                    foreach (var reservation in reserveInfo)
                     {
                         if (reservation.HotelId == item.HotelId && reservation.RoomId == item.RoomId)
                             return null;
@@ -46,7 +44,7 @@ namespace RoomReservationAPI.Services
             try
             {
                 var info = _reservationContext.ReservationInformation.FirstOrDefault(id => id.HotelId == item.HotelID && id.RoomId == item.RoomID);
-                if(info != null)
+                if (info != null)
                 {
                     ReservationDTO reservationDTO = new ReservationDTO();
                     reservationDTO.HotelID = info.HotelId;

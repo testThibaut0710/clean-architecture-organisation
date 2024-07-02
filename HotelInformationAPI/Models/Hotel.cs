@@ -10,7 +10,7 @@ namespace HotelInformationAPI.Models
         [Required(ErrorMessage = "Le nom est requis")]
         [MaxLength(25, ErrorMessage = "Ne doit pas dépasser 25 caractères")]
         public string Name { get; set; }
-        
+
         [Required(ErrorMessage = "La description est requise")]
         [MinLength(25, ErrorMessage = "Doit contenir au moins 25 caractères")]
         public string Description { get; set; }
@@ -21,7 +21,7 @@ namespace HotelInformationAPI.Models
         [Required(ErrorMessage = "Le numéro de contact est requis")]
         [MinLength(10, ErrorMessage = "Le numéro de contact doit contenir 10 caractères")]
         public string ContactNumber { get; set; }
-        
+
         [Required(ErrorMessage = "La ville est requise")]
         public string City { get; set; }
 

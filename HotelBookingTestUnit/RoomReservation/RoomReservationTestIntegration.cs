@@ -1,21 +1,12 @@
-﻿using HotelInformationAPI.Models;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using RoomReservationAPI;
 using RoomReservationAPI.Models;
-using RoomReservationAPI.Models.DTO;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace TestIntegration
 {

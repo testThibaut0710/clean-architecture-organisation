@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace HotelInformationAPI.Services
 {
-    public class HotelRepo : IRepo<Hotel,int>
+    public class HotelRepo : IRepo<Hotel, int>
     {
         private readonly HotelContext _hotelContext;
 

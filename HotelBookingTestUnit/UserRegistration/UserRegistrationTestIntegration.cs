@@ -21,7 +21,7 @@ namespace TestIntegration
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("f1e2d3c4b5a697867564738291a3b2c1")); // Replace with your actual secret key
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-          
+
             var token = new JwtSecurityToken(
                 issuer: "your_issuer",  // Replace with your issuer
                 audience: "your_audience",  // Replace with your audience (if needed)
@@ -75,7 +75,7 @@ namespace TestIntegration
         {
             var userDTO = new UserRegisterDTO
             {
-                
+
             };
             // Arrange
             var token = GenerateJwtToken();

@@ -1,6 +1,6 @@
 ﻿namespace HotelInformationAPI.Interface
 {
-    public interface IHotelSummaryService<T,S,R,I>
+    public interface IHotelSummaryService<T, S, R, I>
     {
         ICollection<T> GetAll();
         ICollection<T> GetByLocation(S location);

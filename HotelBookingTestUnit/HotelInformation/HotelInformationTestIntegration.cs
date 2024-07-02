@@ -1,17 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using HotelInformationAPI;
 using HotelInformationAPI.Models;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Net.Http.Headers;
+using Newtonsoft.Json;
 using System.Diagnostics;
-using HotelInformationAPI;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 
 namespace TestIntegration
 {
@@ -59,7 +54,7 @@ namespace TestIntegration
             // Arrange
             var hotel = new Hotel
             {
-                Id=105,
+                Id = 105,
                 Name = "Hôtel Test",
                 Description = "Description de l'hôtel Test. Cet hôtel est destiné aux tests d'intégration.",
                 Address = "123 Rue Test",
@@ -112,7 +107,7 @@ namespace TestIntegration
 
             // Act
             var response = await _client.PutAsync("/api/GestionHotel/PutHotel", content);
-       
+
             // Assert
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();

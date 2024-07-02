@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using HotelInformationAPI.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using HotelInformationAPI;
-using HotelInformationAPI.Models;
-using System;
 
 public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
 {
@@ -43,7 +41,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 // Ensure the database is created.
                 db.Database.EnsureCreated();
 
-            
+
             }
         });
     }

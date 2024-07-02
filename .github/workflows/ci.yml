@@ -31,18 +31,25 @@ jobs:
         wget https://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip
         unzip chromedriver_linux64.zip
         sudo mv chromedriver /usr/local/bin/
-
     - name: Install Dependencies
       run: dotnet restore master/HotelBookingSystemSolution.sln
 
     - name: Build
       run: dotnet build master/HotelBookingSystemSolution.sln --no-restore
-
+      
     - name: Run Tests noN Graphic
-      run: dotnet test master/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest
+      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest --logger "trx;LogFileName=non_graphic_tests.trx"
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
+    
+    - name: Report Tests
+      uses: dorny/test-reporter@v1
+      if: always()  # Ensure that this step runs even if previous steps fail
+      with:
+        name: Non-Graphic Tests
+        path: '**/non_graphic_tests.trx'
+        reporter: dotnet-trx
 
     - name: Run Tests Selenium
       run: dotnet test master/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
@@ -50,22 +57,6 @@ jobs:
       env:
         TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
         DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
-
-    - name: Generate coverage report
-      run: dotnet tool install --global dotnet-reportgenerator-globaltool && reportgenerator -reports:./TestResults/**/*.xml -targetdir:./TestResults/coveragereport -reporttypes:HtmlInline_AzurePipelines;Cobertura
-      continue-on-error: true
-
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-results
-        path: ./TestResults/
-        
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report
-        path: ./TestResults/coveragereport/
         
     - name: Publish API
       run: |
@@ -113,7 +104,6 @@ jobs:
         zip -r HotelInformationAPI.zip master/HotelInformationAPI/publish/HotelInformationAPI
         zip -r RoomReservationAPI.zip master/RoomReservationAPI/publish/RoomReservationAPI
         zip -r UserRegistrationAPI.zip master/UserRegistrationAPI/publish/UserRegistrationAPI
-
     
     - name: Upload Release Assets - HotelInformationAPI
       uses: actions/upload-release-asset@v1
@@ -165,9 +155,3 @@ jobs:
         with:
           github_token: ${{ secrets.MAX_TOKEN }}
           publish_dir: ./public
-
-    
-    
-
-
-        
