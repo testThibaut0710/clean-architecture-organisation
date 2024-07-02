@@ -13,8 +13,12 @@ namespace TestIntegration
     [TestClass]
     public class UserRegistrationControllerIntegrationTests
     {
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
         private static CustomWebApplicationFactoryUserRegistration<Program> _factory;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
         private HttpClient _client;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
 
         private string GenerateJwtToken()
         {
@@ -119,7 +123,9 @@ namespace TestIntegration
         [TestMethod]
         public async Task Login_InvalidCredentials_ReturnsBadRequest()
         {
+#pragma warning disable CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
             Register_ValidUser_ReturnsOk();
+#pragma warning restore CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
             // Arrange
             var userDTO = new UserDTO
             {

@@ -8,10 +8,18 @@ namespace TestGraphique;
 [TestClass]
 public class TestGraphique
 {
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
     private IWebDriver driver;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
     private string baseUrl;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
     private Process apiProcess;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
     private Process blazorProcess;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
 
 
     [TestInitialize]
@@ -108,7 +116,9 @@ public class TestGraphique
 
 
     [TestCleanup]
+#pragma warning disable CS1998 // Cette méthode async n'a pas d'opérateur 'await' et elle s'exécutera de façon synchrone
     public async Task Teardown()
+#pragma warning restore CS1998 // Cette méthode async n'a pas d'opérateur 'await' et elle s'exécutera de façon synchrone
     {
         // Fermer le navigateur
         driver.Quit();
@@ -132,7 +142,9 @@ public class TestGraphique
     private async Task StartApi()
     {
         string workingDirectory = Directory.GetCurrentDirectory();
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
         string apiProjectDirectory = Path.Combine(projectDirectory, "UserRegistrationAPI");
         Debug.WriteLine(apiProjectDirectory);
 
@@ -155,7 +167,9 @@ public class TestGraphique
     private async Task StartBlazorApp()
     {
         string workingDirectory = Directory.GetCurrentDirectory();
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
         string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.Parent.FullName;
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
         string blazorAppDirectory = Path.Combine(projectDirectory, "BlazorAppFrontend");
         Debug.WriteLine(blazorAppDirectory);
 

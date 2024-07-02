@@ -10,8 +10,12 @@ namespace TestUnitaire
     [TestClass]
     public class HotelControllerTests
     {
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
         private Mock<IService<Hotel, int>> _mockService;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
         private HotelController _controller;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
 
         [TestInitialize]
         public void Setup()
@@ -65,7 +69,11 @@ namespace TestUnitaire
                 NumberOfRooms = 50,
                 Price = 100.00
             };
+#pragma warning disable CS8625 // Impossible de convertir un littéral ayant une valeur null en type référence non-nullable.
+#pragma warning disable CS8600 // Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable.
             _mockService.Setup(service => service.Add(It.IsAny<Hotel>())).Returns((Hotel)null);
+#pragma warning restore CS8600 // Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable.
+#pragma warning restore CS8625 // Impossible de convertir un littéral ayant une valeur null en type référence non-nullable.
 
             // Act
             var result = _controller.Add(hotel).Result as BadRequestObjectResult;
@@ -109,7 +117,11 @@ namespace TestUnitaire
         {
             // Arrange
             var hotel = new Hotel();
+#pragma warning disable CS8625 // Impossible de convertir un littéral ayant une valeur null en type référence non-nullable.
+#pragma warning disable CS8600 // Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable.
             _mockService.Setup(service => service.Update(It.IsAny<Hotel>())).Returns((Hotel)null);
+#pragma warning restore CS8600 // Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable.
+#pragma warning restore CS8625 // Impossible de convertir un littéral ayant une valeur null en type référence non-nullable.
 
             // Act
             var result = _controller.Update(hotel).Result as BadRequestObjectResult;
@@ -142,7 +154,11 @@ namespace TestUnitaire
         {
             // Arrange
             int hotelId = 1;
+#pragma warning disable CS8600 // Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable.
+#pragma warning disable CS8625 // Impossible de convertir un littéral ayant une valeur null en type référence non-nullable.
             _mockService.Setup(service => service.Delete(hotelId)).Returns((Hotel)null);
+#pragma warning restore CS8625 // Impossible de convertir un littéral ayant une valeur null en type référence non-nullable.
+#pragma warning restore CS8600 // Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable.
 
             // Act
             var result = _controller.Delete(hotelId).Result as BadRequestObjectResult;

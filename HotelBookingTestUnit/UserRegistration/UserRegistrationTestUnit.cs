@@ -10,8 +10,12 @@ namespace TestUnitaire
     [TestClass]
     public class UserRegistrationControllerTests
     {
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
         private Mock<IService<UserRegisterDTO, UserDTO>> _mockService;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
+#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
         private UserRegistrationController _controller;
+#pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
 
         [TestInitialize]
         public void Setup()
@@ -54,7 +58,11 @@ namespace TestUnitaire
                 UserName = "john_doe",
                 PasswordClear = "short" // Moins de 8 caractères
             };
+#pragma warning disable CS8600 // Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable.
+#pragma warning disable CS8625 // Impossible de convertir un littéral ayant une valeur null en type référence non-nullable.
             _mockService.Setup(service => service.Register(It.IsAny<UserRegisterDTO>())).Returns((UserDTO)null);
+#pragma warning restore CS8625 // Impossible de convertir un littéral ayant une valeur null en type référence non-nullable.
+#pragma warning restore CS8600 // Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable.
 
             // Act
             var result = _controller.Register(userDTO).Result as BadRequestObjectResult;
@@ -88,7 +96,11 @@ namespace TestUnitaire
         {
             // Arrange
             var userDTO = new UserDTO { /* Initialisez les propriétés appropriées */ };
+#pragma warning disable CS8600 // Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable.
+#pragma warning disable CS8625 // Impossible de convertir un littéral ayant une valeur null en type référence non-nullable.
             _mockService.Setup(service => service.Login(It.IsAny<UserDTO>())).Returns((UserDTO)null);
+#pragma warning restore CS8625 // Impossible de convertir un littéral ayant une valeur null en type référence non-nullable.
+#pragma warning restore CS8600 // Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable.
 
             // Act
             var result = _controller.Login(userDTO).Result as BadRequestObjectResult;
