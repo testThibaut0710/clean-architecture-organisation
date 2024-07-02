@@ -116,7 +116,7 @@ jobs:
       id: package_version
       uses: KageKirin/bump-csproj-version@v0
       with:
-        file: HotelInformationsAPI/HotelInformationAPI.csproj
+        file: HotelInformationAPI/HotelInformationAPI.csproj
         minor: true
 
     - name: Commit new version
