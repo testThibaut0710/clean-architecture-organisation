@@ -127,7 +127,7 @@ jobs:
         git config --global user.email 'thibaut.chabrier0710@gmail.com'
         git commit -am "CI: bump version to ${{ steps.bump_version.outputs.version }}"
         git tag -a "v${{ steps.bump_version.outputs.version }}" -m "CI: create new tag"
-        git push --follow-tags https://${{ secrets.GIT_TOKEN }}@github.com/testThibaut0710/clean-architecture-organisation.git
+        git push --follow-tags https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git
     
     - name: Create GitHub Release
       id: create_release
