@@ -111,27 +111,20 @@ jobs:
       with:
         name: release_artifact
         path: master
-
-    - name: Set project version
-      run: |
-        $version = [xml](Get-Content HotelInformationAPI.csproj)
-        $newVersion = $version.Project.PropertyGroup.Version.Split('.')
-        $newVersion[2] = [int]$newVersion[2] + 1
-        $version.Project.PropertyGroup.Version = $newVersion -join '.'
-        $version.Save('HotelInformationAPI.csproj')
-        Write-Output "Version updated to $($version.Project.PropertyGroup.Version)"
-        shell: pwsh
   
-    - name: Commit version update
-      run: |
-        git add YourProject.csproj
-        git commit -m "Update project version"
-        git push
-        shell: bash
+    - name: Bump version
+      id: package_version
+      uses: KageKirin/bump-csproj-version@v0
+      with:
+        file: HotelInformationsAPI/HotelInformationAPI.csproj
+        minor: true
 
-    - name: Build and test
-      run: dotnet build HotelBookingSystemSolution.sln
-        
+    - name: Commit new version
+      run: |
+        git commit -am "CI: bump version to ${{ steps.test.package_version.version }}"
+        git tag -m "CI: create new tag" v${{ steps.test.package_version.version }}
+        git push --follow-tags https://${{ github.token }}@github.com/testThibaut0710/clean-architecture-organisation
+    
     - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
@@ -201,3 +194,4 @@ jobs:
       with:
         github_token: ${{ secrets.MAX_TOKEN }}
         publish_dir: ./public
+        
