@@ -126,8 +126,8 @@ jobs:
       run: |
        git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git commit -am "CI: bump version to ${{ steps.bump_version.outputs.new_version  }}"
-        git tag -a "v${{ steps.bump_version.outputs.new_version }}" -m "CI: create new tag"
+        git commit -am "CI: bump version to ${{ steps.package_version.new_version  }}"
+        git tag -a "v${{ steps.package_version.new_version }}" -m "CI: create new tag"
         git push --follow-tags https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git
     
     - name: Create GitHub Release
