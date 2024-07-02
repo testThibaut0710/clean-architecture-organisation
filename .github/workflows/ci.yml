@@ -98,7 +98,6 @@ jobs:
         path: master
         retention-seconds: 600
 
-
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -112,6 +111,18 @@ jobs:
       with:
         name: release_artifact
         path: master
+
+    - name: Bump version and push tag
+      id: tag_version
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        git fetch --tags
+        VERSION=$(awk '/<Version>/{print $1}' HotelInformationAPI/HotelInformationAPI.csproj | sed -e 's/<Version>//' -e 's/<\/Version>//')
+        NEW_TAG="v$VERSION"
+        echo "New tag: $NEW_TAG"
+        git tag $NEW_TAG
+        git push origin $NEW_TAG
 
     - name: Create GitHub Release
       id: create_release
