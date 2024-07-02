@@ -120,7 +120,11 @@ jobs:
       uses: KageKirin/bump-csproj-version@v0
       with:
         file: HotelInformationAPI/HotelInformationAPI.csproj
-        minor: true
+        patch: true
+    
+    - name: Get new version
+      id: get_version
+      run: echo "New version is ${{ steps.package_version }}"
 
     - name: Commit new version
       run: |
