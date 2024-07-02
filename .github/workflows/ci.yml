@@ -120,10 +120,14 @@ jobs:
         minor: true
 
     - name: Commit new version
-      run: |
-        git commit -am "CI: bump version to ${{ steps.test.package_version.version }}"
-        git tag -m "CI: create new tag" v${{ steps.test.package_version.version }}
-        git push --follow-tags https://${{ github.token }}@github.com/testThibaut0710/clean-architecture-organisation
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git commit -am "CI: bump version to ${{ steps.bump_version.outputs.version }}"
+          git tag -a "v${{ steps.bump_version.outputs.version }}" -m "CI: create new tag"
+          git push --follow-tags https://${{ secrets.GITHUB_TOKEN }}@github.com/testThibaut0710/clean-architecture-organisation.git
     
     - name: Create GitHub Release
       id: create_release
