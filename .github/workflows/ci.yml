@@ -112,17 +112,13 @@ jobs:
         name: release_artifact
         path: master
 
-    - name: Bump version and push tag
-      id: tag_version
-      run: |
-        git config --global user.name 'github-actions'
-        git config --global user.email 'github-actions@github.com'
-        git fetch --tags
-        VERSION=$(awk '/<Version>/{print $1}' HotelInformationAPI/HotelInformationAPI.csproj | sed -e 's/<Version>//' -e 's/<\/Version>//')
-        NEW_TAG="v$VERSION"
-        echo "New tag: $NEW_TAG"
-        git tag $NEW_TAG
-        git push origin $NEW_TAG
+    - name: Bump versions
+      uses: SiqiLu/dotnet-bump-version@2.1.0
+      with:
+        version_files: "**/*.csproj"
+        version_mask: 0.0.1.0
+        version_overwrite: "*.*.*.*"
+        github_token: ${{ secrets.GITHUB_TOKEN }
 
     - name: Create GitHub Release
       id: create_release
