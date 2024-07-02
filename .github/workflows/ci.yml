@@ -8,9 +8,63 @@ on:
     branches: 
       - master
 
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
 jobs:
-        
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.x'
+
+    - name: Install Chrome and ChromeDriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+        LATEST=$(wget -q -O - https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+        wget https://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
+        sudo mv chromedriver /usr/local/bin/
+    
+    - name: Install Dependencies
+      run: dotnet restore HotelBookingSystemSolution.sln
+
+    - name: Build
+      run: dotnet build HotelBookingSystemSolution.sln --no-restore
+
+    - name: Run Tests Non-Graphic
+      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest --logger "trx;LogFileName=non_graphic_tests.trx"
+      env:
+        TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
+        DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
+    
+    - name: Report Tests
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Non-Graphic Tests
+        path: '**/non_graphic_tests.trx'
+        reporter: dotnet-trx
+
+    - name: Run Tests Selenium
+      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
+      continue-on-error: true
+      env:
+        TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
+        DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
+
   build:
+    needs: test
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -22,56 +76,28 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.x'
-        
-    - name: Install Chrome and ChromeDriver
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
-        LATEST=$(wget -q -O - https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-        wget https://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
-        sudo mv chromedriver /usr/local/bin/
+
     - name: Install Dependencies
       run: dotnet restore master/HotelBookingSystemSolution.sln
 
     - name: Build
       run: dotnet build master/HotelBookingSystemSolution.sln --no-restore
-      
-    - name: Run Tests noN Graphic
-      run: dotnet test HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory!=UITest --logger "trx;LogFileName=non_graphic_tests.trx"
-      env:
-        TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
-        DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
-    
-    - name: Report Tests
-      uses: dorny/test-reporter@v1
-      if: always()  # Ensure that this step runs even if previous steps fail
-      with:
-        name: Non-Graphic Tests
-        path: '**/non_graphic_tests.trx'
-        reporter: dotnet-trx
 
-    - name: Run Tests Selenium
-      run: dotnet test master/HotelBookingSystemSolution.sln --no-build --verbosity normal --filter TestCategory=UITest
-      continue-on-error: true
-      env:
-        TOKEN_KEY_SECRET: ${{ secrets.TOKEN_KEY_SECRET }}
-        DB_STRING_SECRET: ${{ secrets.DB_STRING_SECRET }}
-        
-    - name: Publish API
+    - name: Publish APIs
       run: |
         for api in HotelInformationAPI RoomReservationAPI UserRegistrationAPI; do
           echo "Publishing $api..."
           dotnet publish master/$api/$api.csproj -c Release -o master/$api/publish/$api
           echo "Published $api to master/$api/publish/$api"
         done
-    
+
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
         name: release_artifact
         path: master
         retention-seconds: 600
+
 
   release:
     needs: build
@@ -91,13 +117,12 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }}
       with:
         tag_name: v${{ github.run_number }}
         release_name: Release ${{ github.run_number }}
         draft: false
         prerelease: false
-        
 
     - name: Compress Published APIs
       run: |
@@ -108,7 +133,7 @@ jobs:
     - name: Upload Release Assets - HotelInformationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./HotelInformationAPI.zip
@@ -118,7 +143,7 @@ jobs:
     - name: Upload Release Assets - RoomReservationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./RoomReservationAPI.zip
@@ -128,7 +153,7 @@ jobs:
     - name: Upload Release Assets - UserRegistrationAPI
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }} # Utilisation du GITHUB_TOKEN automatique
+        GITHUB_TOKEN: ${{ secrets.MAX_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./UserRegistrationAPI.zip
@@ -137,21 +162,23 @@ jobs:
 
   deploy_pages:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+    - uses: actions/checkout@v2 
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
  
-      - name: Install redoc-cli
-        run: npm install -g redoc-cli
+    - name: Install redoc-cli
+      run: npm install -g redoc-cli
  
-      - name: Generate HTML from openapi.json
-        run: redoc-cli bundle -o public/index.html ./openapi.json
+    - name: Generate HTML from openapi.json
+      run: redoc-cli bundle -o public/index.html ./openapi.json
  
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.MAX_TOKEN }}
-          publish_dir: ./public
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.MAX_TOKEN }}
+        publish_dir: ./public
