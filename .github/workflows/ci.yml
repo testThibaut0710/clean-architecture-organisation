@@ -122,13 +122,13 @@ jobs:
 
     - name: Commit new version
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ORG_DEPLOY_KEY }}
       run: |
-        git config --global user.name 'Thibaut0710'
-        git config --global user.email 'thibaut.chabrier0710@gmail.com'
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git commit -am "CI: bump version to ${{ steps.bump_version.outputs.version }}"
         git tag -a "v${{ steps.bump_version.outputs.version }}" -m "CI: create new tag"
-        git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        git push https://${{ secrets.ORG_DEPLOY_KEY }}@github.com/${{ github.repository }}.git
     
     - name: Create GitHub Release
       id: create_release
