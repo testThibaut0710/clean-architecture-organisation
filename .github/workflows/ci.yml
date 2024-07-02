@@ -112,14 +112,26 @@ jobs:
         name: release_artifact
         path: master
 
-    - name: Bump versions
-      uses: SiqiLu/dotnet-bump-version@master
-      with:
-        version_files: "**/*.csproj"
-        version_mask: 0.0.1.0
-        version_overwrite: "*.*.*.*"
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Set project version
+      run: |
+        $version = [xml](Get-Content HotelInformationAPI.csproj)
+        $newVersion = $version.Project.PropertyGroup.Version.Split('.')
+        $newVersion[2] = [int]$newVersion[2] + 1
+        $version.Project.PropertyGroup.Version = $newVersion -join '.'
+        $version.Save('HotelInformationAPI.csproj')
+        Write-Output "Version updated to $($version.Project.PropertyGroup.Version)"
+        shell: pwsh
+  
+    - name: Commit version update
+      run: |
+        git add YourProject.csproj
+        git commit -m "Update project version"
+        git push
+        shell: bash
 
+    - name: Build and test
+      run: dotnet build HotelBookingSystemSolution.sln
+        
     - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
