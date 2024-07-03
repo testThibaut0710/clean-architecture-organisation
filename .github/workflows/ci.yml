@@ -6,6 +6,7 @@ on:
     branches: 
       - master
   pull_request:
+    types: [closed]
     branches: 
       - master
 
@@ -100,6 +101,7 @@ jobs:
         retention-seconds: 600
 
   release:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
     needs: build
     runs-on: ubuntu-latest
 
