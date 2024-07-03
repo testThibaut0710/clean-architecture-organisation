@@ -60,14 +60,12 @@ jobs:
           $author_email = git log -1 --pretty=format:'%ae'
           echo "GIT_AUTHOR=$author" >> $env:GITHUB_ENV
           echo "GIT_AUTHOR_EMAIL=$author_email" >> $env:GITHUB_ENV
-
       - name: Build, Test and Analyze
         shell: powershell
         env:
           GIT_AUTHOR: ${{ env.GIT_AUTHOR }}
           GIT_AUTHOR_EMAIL: ${{ env.GIT_AUTHOR_EMAIL }}
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"testThibaut0710_clean-architecture-organisation_f38c73d3-588b-46e7-a976-3b048431ebd3" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.analysis.committer="${{ env.GIT_AUTHOR }}" /d:sonar.analysis.committerEmail="${{ env.GIT_AUTHOR_EMAIL }}" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"testThibaut0710_clean-architecture-organisation_f38c73d3-588b-46e7-a976-3b048431ebd3" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.analysis.committer="${{ env.GIT_AUTHOR }}" /d:sonar.analysis.committerEmail="${{ env.GIT_AUTHOR_EMAIL }}"
           dotnet build
-          dotnet test --collect:"XPlat Code Coverage" --results-directory ./TestResults
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
