@@ -9,6 +9,8 @@ on:
     types: [closed]
     branches: 
       - master
+  release:
+    types: [release]
 
 permissions:
   contents: read
